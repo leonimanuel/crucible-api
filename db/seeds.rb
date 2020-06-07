@@ -11,3 +11,6 @@ ashley = User.create(name: "Ashley", email: "ashley@yahoo.com", password: "milkm
 megan = User.create(name: "Megan", email: "megan@aol.com", password: "greenbeans")
 ben = User.create(name: "Ben", email: "ben@gmail.com", password: "fishsticks")
 luke = User.create(name: "Luke", email: "luke@yahoo.com", password: "milkmaid")
+ 
+fact1 = Fact.create(content: "pandas are big", url: "pandas.com")
+fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
