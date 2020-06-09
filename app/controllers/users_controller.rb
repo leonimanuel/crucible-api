@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		binding.pry
+		# binding.pry
 		user = @current_user
 		render json: UserSerializer.new(user).to_serialized_json
 	end

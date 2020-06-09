@@ -14,3 +14,6 @@ luke = User.create(name: "Luke", email: "luke@yahoo.com", password: "milkmaid")
  
 fact1 = Fact.create(content: "pandas are big", url: "pandas.com")
 fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
+
+billy.facts << fact1
+billy.facts << fact2
