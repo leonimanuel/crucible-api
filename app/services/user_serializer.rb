@@ -6,8 +6,13 @@ class UserSerializer
 	def to_serialized_json
 		options = {
 			include: {
-				facts: {
-					except: [:updated_at, :user_id]
+				topics: {
+					include: {
+						facts: {
+							except: [:updated_at, :user_id]
+						}
+					},
+					except: [:user_id]
 				}
 			},
 			except: [:updated_at, :created_at, :password_digest]
