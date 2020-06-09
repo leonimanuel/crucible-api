@@ -3,4 +3,6 @@ class User < ApplicationRecord
 
 	has_many :facts_users
 	has_many :facts, through: :facts_users
+
+	has_many :topics
 end

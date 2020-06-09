@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :topics
   resources :facts
   resources :users
   # post "users/:email", to: "users#show"

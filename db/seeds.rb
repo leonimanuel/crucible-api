@@ -17,3 +17,8 @@ fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
 
 billy.facts << fact1
 billy.facts << fact2
+
+zoo = Topic.create(name: "Zoology", user: billy)
+zoo.facts << fact1
+zoo.facts << fact2
+
