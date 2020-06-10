@@ -21,7 +21,7 @@ fact4 = Fact.create(content: "science is hard", url: "science.com")
 billy.facts << fact1
 billy.facts << fact2
 
-
+newFacts = Topic.create(name: "New Facts", user: billy)
 
 science = Topic.create(name: "Science", user: billy)
 zoo = Topic.create(name: "Zoology", user: billy, parent: science)

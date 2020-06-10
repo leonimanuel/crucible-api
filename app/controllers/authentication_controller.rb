@@ -2,8 +2,9 @@ class AuthenticationController < ApplicationController
  skip_before_action :authenticate_request
 
  def authenticate
-   # binding.pry
    command = AuthenticateUser.call(params[:email], params[:password])
+   # binding.pry
+
    if command.success?
      user = User.find_by(email: params[:email])
      render json: { auth_token: command.result, email: user.email }

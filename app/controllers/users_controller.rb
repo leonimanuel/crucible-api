@@ -11,4 +11,8 @@ class UsersController < ApplicationController
 		render json: UserSerializer.new(user).to_serialized_json
 		# render json: Topic.find(3).subtree.arrange_serializable
 	end
+
+	def create
+		# upon creation, automatically gets "NEW" folder
+	end
 end
