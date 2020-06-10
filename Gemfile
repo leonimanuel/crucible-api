@@ -18,6 +18,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem "jwt"
 gem "simple_command"
 
+gem "ancestry"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
