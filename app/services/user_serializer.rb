@@ -17,7 +17,7 @@ class UserSerializer
 			},
 			except: [:updated_at, :created_at, :password_digest]
 		}
-		binding.pry
+		# binding.pry
 		@user.to_json(options)
 	end
 end

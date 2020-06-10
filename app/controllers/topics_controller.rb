@@ -14,7 +14,7 @@ class TopicsController < ApplicationController
 		    children: children
 		  }
 		end
-		binding.pry
+		# binding.pry
 		render json: thing 
 		# render json: TopicSerializer.new(user.topics.arrange_serializable).to_serialized_json
 		# render json: 
