@@ -6,7 +6,8 @@ class UsersController < ApplicationController
 
 	def show
 		# binding.pry
-		user = @current_user
+		user = @current_user # || User.find(1)
 		render json: UserSerializer.new(user).to_serialized_json
+		# render json: Topic.find(3).subtree.arrange_serializable
 	end
 end

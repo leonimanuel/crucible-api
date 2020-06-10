@@ -24,9 +24,17 @@ billy.facts << fact2
 
 
 science = Topic.create(name: "Science", user: billy)
-
 zoo = Topic.create(name: "Zoology", user: billy, parent: science)
 zoo.facts << fact1
 zoo.facts << fact2
+
+politics = Topic.create(name: "Politics", user: billy)
+civil_rights = Topic.create(name: "Civil Rights", user: billy, parent: politics)
+climate_change = Topic.create(name: "Climate Change", user: billy, parent: politics)
+
+
+
+
+
 
 
