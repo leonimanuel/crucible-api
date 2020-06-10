@@ -32,6 +32,8 @@ politics = Topic.create(name: "Politics", user: billy)
 civil_rights = Topic.create(name: "Civil Rights", user: billy, parent: politics)
 climate_change = Topic.create(name: "Climate Change", user: billy, parent: politics)
 
+blm = Topic.create(name: "Black Lives Matter", user: billy, parent: civil_rights)
+free_speech = Topic.create(name: "Free Speech", user: billy, parent: civil_rights)
 
 
 
