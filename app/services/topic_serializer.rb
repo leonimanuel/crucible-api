@@ -25,7 +25,7 @@ class TopicSerializer
 				updated_at: parent.updated_at,
 				user_id: 1,
 				ancestry: parent.ancestry,
-		    root: parent.root,
+		    root: parent.root.name,
 		    children: children
 		  }
 		end
