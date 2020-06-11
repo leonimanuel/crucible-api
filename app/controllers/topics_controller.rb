@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
 	def index
 		user = @current_user || User.find(1)
 		# binding.pry
-		thing = user.topics.arrange_serializable do |parent, children|
+		serialized_topic_tree = user.topics.arrange_serializable do |parent, children|
 		  {
 		    id: parent.id,
 		    name: parent.name,
@@ -15,8 +15,9 @@ class TopicsController < ApplicationController
 		  }
 		end
 		# binding.pry
-		render json: thing 
-		# render json: TopicSerializer.new(user.topics.arrange_serializable).to_serialized_json
+		# render json: serialized_topic_tree
+		# binding.pry
+		render json: TopicSerializer.new(user.topics).to_serialized_json_tree
 		# render json: 
 	end
 
