@@ -35,7 +35,7 @@ climate_change = Topic.create(name: "Climate Change", user: billy, parent: polit
 blm = Topic.create(name: "Black Lives Matter", user: billy, parent: civil_rights)
 free_speech = Topic.create(name: "Free Speech", user: billy, parent: civil_rights)
 
-
+fifth_amendment = Topic.create(name: "Fith Amendment", user: billy, parent: free_speech)
 
 
 
