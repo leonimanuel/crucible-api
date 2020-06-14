@@ -8,6 +8,9 @@ class GroupSerializer
 			include: {
 				discussions: {
 					except: [:updated_at]
+				},
+				users: {
+					except: [:password]
 				}
 			}
 		}
