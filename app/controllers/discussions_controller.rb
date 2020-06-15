@@ -7,7 +7,7 @@ class DiscussionsController < ApplicationController
 		json_response = JSON.parse(response.body)
 
 
-		discussion = Discussion.create(name: json_response["title"], group: Group.find(params[:group_id]))
+		discussion = Discussion.create(name: json_response["title"].split(" ").join("_"), group: Group.find(params[:group_id]))
 		article = Article.create(title: json_response["title"], content: json_response["text"], discussion: discussion)
 		# if article.valid?
 		
@@ -16,7 +16,7 @@ class DiscussionsController < ApplicationController
 	end
 
 	def show
-		binding.pry
+		# binding.pry
 		discussion = Discussion.find(params[:id]) 
 		render json: DiscussionSerializer.new(discussion).to_serialized_json
 	end
