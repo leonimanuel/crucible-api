@@ -16,7 +16,7 @@ class DiscussionsController < ApplicationController
 	end
 
 	def show
-		# binding.pry
+		binding.pry
 		discussion = Discussion.find(params[:id]) 
 		render json: DiscussionSerializer.new(discussion).to_serialized_json
 	end
