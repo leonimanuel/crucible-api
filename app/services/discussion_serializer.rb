@@ -8,6 +8,9 @@ class DiscussionSerializer
 			include: {
 				article: {
 					except: [:updated_at]
+				},
+				comments: {
+					except: [:updated_at]
 				}
 			}
 		}

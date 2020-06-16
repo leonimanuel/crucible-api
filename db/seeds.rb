@@ -44,6 +44,7 @@ econ = Group.create(name: "Econ 100")
 
 fam.users.push(billy, megan, ashley)
 
+
 # new_drug = Discussion.create(name: "This New Drug is Lit", group: fam)
 
 
