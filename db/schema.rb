@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_024656) do
+ActiveRecord::Schema.define(version: 2020_06_16_203744) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -19,6 +19,14 @@ ActiveRecord::Schema.define(version: 2020_06_15_024656) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "discussion_id"
     t.index ["discussion_id"], name: "index_articles_on_discussion_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "content"
+    t.integer "discussion_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 
   create_table "discussions", force: :cascade do |t|
@@ -35,6 +43,15 @@ ActiveRecord::Schema.define(version: 2020_06_15_024656) do
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "facts_comments", force: :cascade do |t|
+    t.integer "fact_id", null: false
+    t.integer "comment_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
+    t.index ["fact_id"], name: "index_facts_comments_on_fact_id"
   end
 
   create_table "facts_users", force: :cascade do |t|
@@ -86,6 +103,9 @@ ActiveRecord::Schema.define(version: 2020_06_15_024656) do
     t.index ["user_id"], name: "index_users_groups_on_user_id"
   end
 
+  add_foreign_key "comments", "discussions"
+  add_foreign_key "facts_comments", "comments"
+  add_foreign_key "facts_comments", "facts"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
 end

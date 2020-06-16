@@ -16,8 +16,13 @@ class DiscussionsController < ApplicationController
 	end
 
 	def show
-		binding.pry
-		discussion = Discussion.find(params[:id]) 
-		render json: DiscussionSerializer.new(discussion).to_serialized_json
+		# binding.pry
+		if Group.find(params[:group_id]).users.include?(@current_user)
+			discussion = Discussion.find(params[:id]) 
+			render json: DiscussionSerializer.new(discussion).to_serialized_json			
+		else
+			render json: {error: "You must be a part of this group to view this discussion"}
+		end
+
 	end
 end

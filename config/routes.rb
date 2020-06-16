@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   resources :facts
   resources :users
   resources :groups, only: [:index] do
-	  resources :discussions, only: [:create, :show]	
+	  resources :discussions, only: [:create, :show] do
+	  	resources :comments, only: [:create, :index]
+	  end	
   end
   # post "users/:email", to: "users#show"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
