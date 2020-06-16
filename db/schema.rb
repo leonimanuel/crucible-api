@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_203744) do
+ActiveRecord::Schema.define(version: 2020_06_16_212053) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2020_06_16_203744) do
     t.integer "discussion_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "span_id"
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 
