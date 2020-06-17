@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_232708) do
+ActiveRecord::Schema.define(version: 2020_06_17_215007) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2020_06_16_232708) do
     t.string "selection"
     t.integer "startPoint"
     t.integer "endPoint"
+    t.string "previous_el_id"
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 

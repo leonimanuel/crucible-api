@@ -6,6 +6,7 @@ class CommentsController < ApplicationController
 		comment = Comment.create(content: params[:comment_text], span_id: params[:span_id], 
 			selection: params[:selection], startPoint: params[:start_offset], 
 			endPoint: params[:end_offset], 
+			previous_el_id: params[:previous_el_id],
 			discussion: Discussion.find(params[:discussion_id]))
 		render json: CommentSerializer.new(comment).to_serialized_json
 	end
