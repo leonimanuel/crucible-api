@@ -2,12 +2,15 @@ class CommentsController < ApplicationController
 	def create
 		# binding.pry
 		user = @current_user
+		discussion = Discussion.find(params[:discussion_id])
 
 		comment = Comment.create(content: params[:comment_text], span_id: params[:span_id], 
 			selection: params[:selection], startPoint: params[:start_offset], 
 			endPoint: params[:end_offset], 
 			previous_el_id: params[:previous_el_id],
-			discussion: Discussion.find(params[:discussion_id]))
+			discussion: discussion,
+			user: user
+		)
 		render json: CommentSerializer.new(comment).to_serialized_json
 	end
 
