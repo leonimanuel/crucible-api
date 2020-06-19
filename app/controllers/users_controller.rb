@@ -1,6 +1,14 @@
 class UsersController < ApplicationController
 	def index
-		users = User.all
+		binding.pry
+		if request.headers["searchVal"]
+			search_val = request.headers["searchVal"]
+			users = User.where("name like ?", "%#{search_val}%").all 
+		
+		else
+			users = User.all
+		end
+
 		# binding.pry
 		render json: UserSerializer.new(users).to_serialized_json
 	end
