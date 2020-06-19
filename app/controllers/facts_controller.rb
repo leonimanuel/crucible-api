@@ -1,5 +1,6 @@
 class FactsController < ApplicationController
 	def create
+		# binding.pry
 		user = @current_user
 
 		if params[:origin_topic_name] && params[:destination_topic_name]

@@ -7,7 +7,7 @@ class DiscussionsController < ApplicationController
 		json_response = JSON.parse(response.body)
 
 
-		discussion = Discussion.create(name: json_response["title"].split(" ").join("_"), group: Group.find(params[:group_id]))
+		discussion = Discussion.create(name: json_response["title"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: params[:article_url])
 		article = Article.create(title: json_response["title"], content: json_response["text"], discussion: discussion)
 		# if article.valid?
 		
