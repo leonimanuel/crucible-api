@@ -20,4 +20,12 @@ class UserSerializer
 		# binding.pry
 		@user.to_json(options)
 	end
+
+	def to_serialized_json_lite
+		options = {
+			except: [:updated_at, :created_at, :password_digest]
+		}
+		# binding.pry
+		@user.to_json(options)
+	end
 end
