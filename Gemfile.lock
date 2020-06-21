@@ -58,6 +58,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     ancestry (3.0.7)
       activerecord (>= 3.2.0)
+    aylien_text_api (1.0.0)
     bcrypt (3.1.13)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
@@ -66,6 +67,7 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
+    curb (0.9.10)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
@@ -166,9 +168,11 @@ PLATFORMS
 
 DEPENDENCIES
   ancestry
+  aylien_text_api
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
+  curb
   dotenv-rails
   faraday
   jwt

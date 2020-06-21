@@ -19,6 +19,9 @@ gem "jwt"
 gem "simple_command"
 
 gem "faraday"
+gem 'aylien_text_api'
+gem "curb"
+
 gem "dotenv-rails"
 
 gem "ancestry"
