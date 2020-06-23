@@ -10,7 +10,15 @@ class DiscussionSerializer
 					except: [:updated_at]
 				},
 				comments: {
-					except: [:updated_at]
+					except: [:updated_at],
+					include: {
+						facts: {
+							except: [:updated_at, :created_at]
+						},
+						user: {
+							only: [:name]
+						}
+					}
 				}
 			}
 		}
