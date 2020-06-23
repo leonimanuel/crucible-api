@@ -11,6 +11,12 @@ class CommentsController < ApplicationController
 			discussion: discussion,
 			user: user
 		)
+
+		params[:factIds].each do |factId|
+			fact = Fact.find(factId)
+			comment.facts << fact
+		end
+		# binding.pry
 		render json: CommentSerializer.new(comment).to_serialized_json
 	end
 

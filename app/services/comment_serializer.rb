@@ -8,6 +8,9 @@ class CommentSerializer
 			include: {
 				facts: {
 					except: [:updated_at]
+				},
+				user: {
+					only: [:name]
 				}
 			}
 		}
