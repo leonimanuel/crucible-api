@@ -16,6 +16,15 @@ class FactsController < ApplicationController
 			render json: TopicSerializer.new(user.topics).to_serialized_json_tree
 			# render json: TopicSerializer.new(origin_topic.subtree).to_serialized_json_tree
 			# render json: FactSerializer.new(fact).to_serialized_json
+		elsif params[:factId]
+			fact = Fact.find(params[:factId])
+			
+			if user.facts.include?(fact)
+				render json: {error: "you've already collected this fact"}
+			else
+				user.facts << fact
+				render json: FactSerializer.new(fact).to_serialized_json				
+			end
 		else
 			fact = Fact.new(content: params[:selected_text], url: params[:selection_url])
 			if fact.valid?
