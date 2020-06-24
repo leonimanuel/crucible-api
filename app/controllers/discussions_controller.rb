@@ -9,7 +9,6 @@ class DiscussionsController < ApplicationController
 	def create
 		user = @current_user
 		article_url = params[:articleURL]
-		binding.pry
 
 		uri = URI.parse("https://autoextract.scrapinghub.com/v1/extract")
 		request = Net::HTTP::Post.new(uri)
@@ -33,7 +32,6 @@ class DiscussionsController < ApplicationController
 
 		boi = JSON.parse(response.body)
 		json_response = boi[0]["article"]
-		binding.pry
 
 		if json_response
 			discussion = Discussion.create(name: json_response["headline"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: params[:article_url])
