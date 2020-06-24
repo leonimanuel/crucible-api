@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :topics
   resources :facts
   resources :users
-  resources :groups, only: [:index] do
+  resources :groups, only: [:index, :create] do
 	  resources :discussions, only: [:create, :show] do
 	  	resources :comments, only: [:create, :index]
 	  end	
