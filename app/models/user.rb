@@ -8,4 +8,5 @@ class User < ApplicationRecord
 	has_many :groups, through: :users_groups
 	has_many :discussions, through: :groups
 	has_many :comments
+	has_many :messages
 end

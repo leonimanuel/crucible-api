@@ -19,6 +19,9 @@ class DiscussionSerializer
 							only: [:name]
 						}
 					}
+				},
+				messages: {
+					except: [:updated_at]
 				}
 			}
 		}

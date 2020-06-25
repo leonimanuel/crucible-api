@@ -2,14 +2,16 @@ class MessagesController < ApplicationController
   def create
     # message = Message.new(message_params)
     # discussion = Discussion.find(message_params[:discussion_id])
-    binding.pry
+    # binding.pry
     user = @current_user
-    message = Message.new(text: params[:text], discussion: params[:discussion_id], user: user)
-    discussion = Discussion.find(params[:discussion_id])
+
+    discussion = Discussion.find(params[:discussion_id])    
+    message = Message.new(text: params[:text], discussion: discussion, user: user)
     if message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         MessageSerializer.new(message)
       ).serializable_hash
+      # binding.pry
       MessagesChannel.broadcast_to discussion, serialized_data
       head :ok
     end

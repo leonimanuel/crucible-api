@@ -4,4 +4,5 @@ class Discussion < ApplicationRecord
 	has_one :article
 	# has_one :from
 	has_many :comments
+	has_many :messages
 end
