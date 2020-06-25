@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_17_235418) do
+ActiveRecord::Schema.define(version: 2020_06_25_162731) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -73,6 +76,16 @@ ActiveRecord::Schema.define(version: 2020_06_17_235418) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "text"
+    t.bigint "discussion_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discussion_id"], name: "index_messages_on_discussion_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -112,6 +125,8 @@ ActiveRecord::Schema.define(version: 2020_06_17_235418) do
   add_foreign_key "comments", "discussions"
   add_foreign_key "facts_comments", "comments"
   add_foreign_key "facts_comments", "facts"
+  add_foreign_key "messages", "discussions"
+  add_foreign_key "messages", "users"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
 end
