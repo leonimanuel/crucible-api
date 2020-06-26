@@ -24,7 +24,7 @@ class DiscussionSerializer
 					except: [:updated_at],
 					include: {
 						user: {
-							only: [:name]
+							only: [:name, :id]
 						}
 					}
 				}
