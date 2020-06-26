@@ -9,8 +9,8 @@ class MessagesController < ApplicationController
     message = Message.new(text: params[:text], discussion: discussion, user: user)
     if message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        MessageSerializer.new(message)
-      ).serializable_hash
+        MessageSerializer.new(message)).serializable_hash
+      # binding.pry
       puts "JUST SERIALIZED THAT DATA BIG BOI"
       MessagesChannel.broadcast_to discussion, serialized_data
       head :ok

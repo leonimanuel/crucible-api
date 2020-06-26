@@ -21,7 +21,12 @@ class DiscussionSerializer
 					}
 				},
 				messages: {
-					except: [:updated_at]
+					except: [:updated_at],
+					include: {
+						user: {
+							only: [:name]
+						}
+					}
 				}
 			}
 		}

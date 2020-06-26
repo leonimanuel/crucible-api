@@ -3,6 +3,6 @@ class MessageSerializer < ActiveModel::Serializer
   belongs_to :user
 
   def user
-  	object.user.name
+  	{name: object.user.name}
   end
 end
