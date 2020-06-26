@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: redis://redistogo:c3e377dd2121eb379d1d1fd45dfe6181@crestfish.redistogo.com:9961/
   channel_prefix: crucible_api_production
