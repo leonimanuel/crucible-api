@@ -1,12 +1,15 @@
 class MessagesController < ApplicationController
+  skip_before_action :authenticate_request
+
   def create
     # message = Message.new(message_params)
     # discussion = Discussion.find(message_params[:discussion_id])
     # binding.pry
-    user = @current_user
-
+    # user = @current_user
+    user = User.find(params[:userId])
     discussion = Discussion.find(params[:discussion_id])    
     message = Message.new(text: params[:text], discussion: discussion, user: user)
+    # binding.pry
     if message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         MessageSerializer.new(message)).serializable_hash

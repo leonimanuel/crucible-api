@@ -3,11 +3,11 @@ class AuthenticationController < ApplicationController
 
  def authenticate
    command = AuthenticateUser.call(params[:email], params[:password])
-   # binding.pry
 
    if command.success?
      user = User.find_by(email: params[:email])
-     render json: { auth_token: command.result, email: user.email }
+     render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }
+     # render json: [{ auth_token: command.result }, JSON.parse(UserSerializer.new(user).to_serialized_json)]
    else
      render json: { error: command.errors }, status: :unauthorized
    end

@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+	skip_before_action :authenticate_request, only: [:create]
+
 	def index
 		if request.headers["searchVal"]
 			search_val = request.headers["searchVal"]
@@ -17,12 +19,27 @@ class UsersController < ApplicationController
 
 	def show
 		# binding.pry
-		user = @current_user # || User.find(1)
+		user = User.find(1)
+		# user = @current_user # || User.find(1)
+		# render json: [{bok: "choy"}, JSON.parse(UserSerializer.new(user).to_serialized_json)]
 		render json: UserSerializer.new(user).to_serialized_json
 		# render json: Topic.find(3).subtree.arrange_serializable
 	end
 
 	def create
-		# upon creation, automatically gets "NEW" folder
+		user = User.new(name: params[:name], email: params[:email], password: params[:password])
+		if user.valid? && !User.find_by(email: params[:email])
+			user.save
+			user.topics << Topic.create(name: "New Facts", user: user)
+			
+			command = AuthenticateUser.call(user.email, user.password)
+			render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }
+		end
 	end
 end
+
+
+
+
+
+
