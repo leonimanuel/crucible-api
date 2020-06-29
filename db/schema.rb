@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_29_230449) do
+ActiveRecord::Schema.define(version: 2020_06_29_232422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,6 +125,16 @@ ActiveRecord::Schema.define(version: 2020_06_29_230449) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "users_discussions_unread_messages_counts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discussion_id", null: false
+    t.integer "unread_messages", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discussion_id"], name: "index_users_discussions_unread_messages_counts_on_discussion_id"
+    t.index ["user_id"], name: "index_users_discussions_unread_messages_counts_on_user_id"
+  end
+
   create_table "users_groups", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
@@ -141,6 +151,8 @@ ActiveRecord::Schema.define(version: 2020_06_29_230449) do
   add_foreign_key "messages", "users"
   add_foreign_key "messages_users_reads", "messages"
   add_foreign_key "messages_users_reads", "users"
+  add_foreign_key "users_discussions_unread_messages_counts", "discussions"
+  add_foreign_key "users_discussions_unread_messages_counts", "users"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
 end

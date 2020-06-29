@@ -42,6 +42,11 @@ class DiscussionsController < ApplicationController
 				content: json_response["articleBodyHtml"], 
 				discussion: discussion
 			)
+
+			discussion.users.each do ||
+				UsersDiscussionsUnreadMessagesCount.create(user: @current_user, discussion: discussion, unread_messages: 0)
+			end
+
 			# binding.pry
 			render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		end
