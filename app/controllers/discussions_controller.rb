@@ -42,9 +42,14 @@ class DiscussionsController < ApplicationController
 	end
 
 	def show
+		group_name = params[:group_id].split("-").join(" ")
+		discussion_name = params[:id]
 		# binding.pry
-		if Group.find(params[:group_id]).users.include?(@current_user)
-			discussion = Discussion.find(params[:id]) 
+
+		group = @current_user.groups.find_by(name: group_name)
+		if group
+			# binding.pry
+			discussion = group.discussions.find_by(name: discussion_name) 
 			render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
 			render json: {error: "You must be a part of this group to view this discussion"}
