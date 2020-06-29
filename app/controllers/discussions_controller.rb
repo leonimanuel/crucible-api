@@ -35,8 +35,14 @@ class DiscussionsController < ApplicationController
 
 		if json_response
 			discussion = Discussion.create(name: json_response["headline"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: params[:article_url])
-			article = Article.create(title: json_response["headline"], content: json_response["articleBodyHtml"], discussion: discussion)
-			# binding.pry
+			article = Article.create(
+				title: json_response["headline"], 
+				author: json_response["author"],
+				date_published: json_response["datePublishedRaw"],
+				content: json_response["articleBodyHtml"], 
+				discussion: discussion
+			)
+			binding.pry
 			render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		end
 	end

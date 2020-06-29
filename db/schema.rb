@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_162731) do
+ActiveRecord::Schema.define(version: 2020_06_29_160139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,13 +20,15 @@ ActiveRecord::Schema.define(version: 2020_06_25_162731) do
     t.string "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "discussion_id"
+    t.bigint "discussion_id"
+    t.string "author"
+    t.string "date_published"
     t.index ["discussion_id"], name: "index_articles_on_discussion_id"
   end
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
-    t.integer "discussion_id", null: false
+    t.bigint "discussion_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "span_id"
@@ -43,7 +45,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_162731) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "article_url"
-    t.integer "group_id"
+    t.bigint "group_id"
     t.index ["group_id"], name: "index_discussions_on_group_id"
   end
 
@@ -55,8 +57,8 @@ ActiveRecord::Schema.define(version: 2020_06_25_162731) do
   end
 
   create_table "facts_comments", force: :cascade do |t|
-    t.integer "fact_id", null: false
-    t.integer "comment_id", null: false
+    t.bigint "fact_id", null: false
+    t.bigint "comment_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
@@ -114,8 +116,8 @@ ActiveRecord::Schema.define(version: 2020_06_25_162731) do
   end
 
   create_table "users_groups", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "group_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "group_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["group_id"], name: "index_users_groups_on_group_id"
