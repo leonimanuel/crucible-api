@@ -11,6 +11,15 @@ class MessagesController < ApplicationController
     message = Message.new(text: params[:text], discussion: discussion, user: user)
     # binding.pry
     if message.save
+      recipients = message.discussion.users.select do |user|
+        user.id != message.user_id
+      end
+
+      recipients.each do |recipient|
+        MessagesUsersRead.create(message: message, user: recipient, read: false)
+      end
+      binding.pry
+
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         MessageSerializer.new(message)).serializable_hash
       # binding.pry

@@ -42,7 +42,7 @@ class DiscussionsController < ApplicationController
 				content: json_response["articleBodyHtml"], 
 				discussion: discussion
 			)
-			binding.pry
+			# binding.pry
 			render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		end
 	end

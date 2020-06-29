@@ -27,6 +27,9 @@ class DiscussionSerializer
 							only: [:name, :id]
 						}
 					}
+				},
+				group: {
+					only: [:name]
 				}
 			}
 		}
