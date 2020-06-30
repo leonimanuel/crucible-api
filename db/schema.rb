@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_29_232422) do
+ActiveRecord::Schema.define(version: 2020_06_29_235754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 2020_06_29_232422) do
     t.string "previous_el_id"
     t.integer "user_id"
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
+  end
+
+  create_table "discussion_unread_messages", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discussion_id", null: false
+    t.integer "unread_messages", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discussion_id"], name: "index_discussion_unread_messages_on_discussion_id"
+    t.index ["user_id"], name: "index_discussion_unread_messages_on_user_id"
   end
 
   create_table "discussions", force: :cascade do |t|
@@ -125,16 +135,6 @@ ActiveRecord::Schema.define(version: 2020_06_29_232422) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users_discussions_unread_messages_counts", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "discussion_id", null: false
-    t.integer "unread_messages", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["discussion_id"], name: "index_users_discussions_unread_messages_counts_on_discussion_id"
-    t.index ["user_id"], name: "index_users_discussions_unread_messages_counts_on_user_id"
-  end
-
   create_table "users_groups", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
@@ -145,14 +145,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_232422) do
   end
 
   add_foreign_key "comments", "discussions"
+  add_foreign_key "discussion_unread_messages", "discussions"
+  add_foreign_key "discussion_unread_messages", "users"
   add_foreign_key "facts_comments", "comments"
   add_foreign_key "facts_comments", "facts"
   add_foreign_key "messages", "discussions"
   add_foreign_key "messages", "users"
   add_foreign_key "messages_users_reads", "messages"
   add_foreign_key "messages_users_reads", "users"
-  add_foreign_key "users_discussions_unread_messages_counts", "discussions"
-  add_foreign_key "users_discussions_unread_messages_counts", "users"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
 end

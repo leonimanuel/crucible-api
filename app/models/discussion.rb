@@ -5,4 +5,6 @@ class Discussion < ApplicationRecord
 	# has_one :from
 	has_many :comments
 	has_many :messages
+
+	has_many :discussion_unread_messages
 end

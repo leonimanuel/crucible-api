@@ -43,8 +43,8 @@ class DiscussionsController < ApplicationController
 				discussion: discussion
 			)
 
-			discussion.users.each do ||
-				UsersDiscussionsUnreadMessagesCount.create(user: @current_user, discussion: discussion, unread_messages: 0)
+			discussion.users.each do |d_user|
+				DiscussionUnreadMessage.create(user: d_user, discussion: discussion, unread_messages: 0)
 			end
 
 			# binding.pry

@@ -30,6 +30,9 @@ class DiscussionSerializer
 				},
 				group: {
 					only: [:name]
+				},
+				discussion_unread_messages: {
+					only: [:unread_messages]
 				}
 			}
 		}
