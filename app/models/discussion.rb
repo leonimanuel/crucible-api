@@ -8,4 +8,12 @@ class Discussion < ApplicationRecord
 
 	has_many :messages_users_reads
 	has_many :discussion_unread_messages
+
+	def unread_messages
+		return DiscussionUnreadMessage.all.where(user_id: 3)
+	end
+
+	def unread_messages_by_user
+		return DiscussionSerializer.unread_messages_by_user
+	end
 end

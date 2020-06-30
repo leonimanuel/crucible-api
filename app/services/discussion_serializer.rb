@@ -32,10 +32,14 @@ class DiscussionSerializer
 					only: [:name]
 				},
 				discussion_unread_messages: {
-					only: [:unread_messages]
+					only: [:user_id, :unread_messages]
 				}
 			}
 		}
 		@discussion.to_json(options)
 	end
+
+	# def unread_messages_by_user
+	# 	return DiscussionUnreadMessage.with_user_id(@user.id)
+	# end
 end
