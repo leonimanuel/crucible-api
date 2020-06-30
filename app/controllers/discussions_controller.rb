@@ -47,7 +47,6 @@ class DiscussionsController < ApplicationController
 				DiscussionUnreadMessage.create(user: member, discussion: discussion, unread_messages: 0)
 			end
 
-			# binding.pry
 			render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		end
 	end
@@ -59,9 +58,11 @@ class DiscussionsController < ApplicationController
 
 		group = @current_user.groups.find_by(name: group_name)
 		if group
-			discussion = group.discussions.find_by(name: discussion_name) 
+			@discussion = group.discussions.find_by(name: discussion_name) 
 			# binding.pry
-			render json: DiscussionSerializer.new(discussion).to_serialized_json			
+			# render json: @discussion, serializer(DiscussionSerializer)
+			render json: @discussion, current_user_id: user.id		
+			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
 			render json: {error: "You must be a part of this group to view this discussion"}
 		end
