@@ -19,10 +19,12 @@ class UsersController < ApplicationController
 
 	def show
 		# binding.pry
-		user = User.find(1)
+		user = @current_user
 		# user = @current_user # || User.find(1)
 		# render json: [{bok: "choy"}, JSON.parse(UserSerializer.new(user).to_serialized_json)]
-		render json: UserSerializer.new(user).to_serialized_json
+		# binding.pry
+		render json: LoginSerializer.new(user).to_json
+		# render json: UserSerializer.new(user).to_serialized_json
 		# render json: Topic.find(3).subtree.arrange_serializable
 	end
 
