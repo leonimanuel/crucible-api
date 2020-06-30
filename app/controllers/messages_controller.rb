@@ -16,7 +16,7 @@ class MessagesController < ApplicationController
       end
 
       recipients.each do |recipient|
-        MessagesUsersRead.create(message: message, user: recipient, read: false)
+        MessagesUsersRead.create(message: message, discussion: discussion, user: recipient, read: false)
       end
       # binding.pry
 

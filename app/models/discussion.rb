@@ -6,5 +6,6 @@ class Discussion < ApplicationRecord
 	has_many :comments
 	has_many :messages
 
+	has_many :messages_users_reads
 	has_many :discussion_unread_messages
 end
