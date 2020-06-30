@@ -18,6 +18,10 @@ class MessagesController < ApplicationController
       recipients.each do |recipient|
         MessagesUsersRead.create(message: message, discussion: discussion, user: recipient, read: false)
       end
+
+      recipients.each do |recipient|
+        DiscussionUnreadMessage.with_discussion_id(discussion.id).find_by(user_id: recipient.id).update(unread_messages: MessagesUsersRead.unread.with_user_id(recipient.id).with_discussion_id(discussion.id).count)
+      end
       # binding.pry
 
       serialized_data = ActiveModelSerializers::Adapter::Json.new(

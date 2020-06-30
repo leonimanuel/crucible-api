@@ -4,6 +4,6 @@ class MessagesUsersRead < ApplicationRecord
   belongs_to :user
 
   scope :unread, -> { where(read: false) }
-  scope :with_user, -> (user_id) { where("user_id = ?", user_id) }
-  scope :with_discussion, -> (discussion_id) { where("discussion_id = ?", discussion_id) }
+  scope :with_user_id, -> (user_id) { where("user_id = ?", user_id) }
+  scope :with_discussion_id, -> (discussion_id) { where("discussion_id = ?", discussion_id) }
 end
