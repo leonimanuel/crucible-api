@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  skip_before_action :authenticate_request
+  # skip_before_action :authenticate_request
 
   def create
     # message = Message.new(message_params)
@@ -37,8 +37,16 @@ class MessagesController < ApplicationController
   end
   
   def index
-    @messages = Message.where(discussion_id: params[:discussion_id]).all
+    user = @current_user
     # binding.pry
+    @messages = Message.where(discussion_id: params[:discussion_id]).all
+
+    MessagesUsersRead.unread.with_discussion_id(params[:discussion_id]).with_user_id(user.id).all.each do |entry|
+      entry.update(read: true)
+    end
+
+    DiscussionUnreadMessage.with_discussion_id(params[:discussion_id]).with_user_id(user.id).first.update(unread_messages: 0)
+
     render json: @messages
   end
   private

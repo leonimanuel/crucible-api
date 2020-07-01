@@ -2,7 +2,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 	attributes :id, :name, :group_id, :unread_messages_count, :created_at
 	has_one :article
 	has_many :comments
-	has_many :messages
+	# has_many :messages
 	belongs_to :group 
 	
 	def unread_messages_count

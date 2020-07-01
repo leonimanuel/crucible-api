@@ -13,6 +13,6 @@ class DiscussionUnreadMessagesController < ApplicationController
 
 		serialized_data = {discussion_id: params[:discussion_id], unread_messages: 0}
 		ActionCable.server.broadcast "message_notifications_channel", serialized_data
-		head "ok"
+		head :ok
 	end
 end
