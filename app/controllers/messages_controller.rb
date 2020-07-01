@@ -30,8 +30,8 @@ class MessagesController < ApplicationController
       puts "JUST SERIALIZED THAT DATA BIG BOI"
       MessagesChannel.broadcast_to discussion, serialized_data, status: "HTTP/1.1 200 OK"
 
-      serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1 }
-      ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data, status: "HTTP/1.1 200 OK"
+      # serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1 }
+      # ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data, status: "HTTP/1.1 200 OK"
     end
   end
   
