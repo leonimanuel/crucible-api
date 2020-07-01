@@ -36,6 +36,11 @@ class MessagesController < ApplicationController
     end
   end
   
+  def index
+    @messages = Message.where(discussion_id: params[:discussion_id]).all
+    # binding.pry
+    render json: @messages
+  end
   private
   
   # def message_params
