@@ -34,20 +34,20 @@ class DiscussionsController < ApplicationController
 		json_response = boi[0]["article"]
 
 		if json_response
-			discussion = Discussion.create(name: json_response["headline"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: params[:article_url])
+			@discussion = Discussion.create(name: json_response["headline"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: params[:article_url])
 			article = Article.create(
 				title: json_response["headline"], 
 				author: json_response["author"],
 				date_published: json_response["datePublishedRaw"],
 				content: json_response["articleBodyHtml"], 
-				discussion: discussion
+				discussion: @discussion
 			)
 
-			discussion.users.each do |member|
-				DiscussionUnreadMessage.create(user: member, discussion: discussion, unread_messages: 0)
+			@discussion.users.each do |member|
+				DiscussionUnreadMessage.create(user: member, discussion: @discussion, unread_messages: 0)
 			end
 
-			render json: DiscussionSerializer.new(discussion).to_serialized_json			
+			render json: @discussion, current_user_id: user.id		
 		end
 	end
 
