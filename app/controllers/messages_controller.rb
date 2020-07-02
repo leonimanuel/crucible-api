@@ -31,9 +31,9 @@ class MessagesController < ApplicationController
       ActionCable.server.broadcast "messages_channel", serialized_data
       head :ok
 
-      # serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1 }
-      # ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data
-      # head "ok"
+      serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1, sender_id: user.id}
+      ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data
+      head :ok
     end
   end
   
