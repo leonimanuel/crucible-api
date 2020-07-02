@@ -27,7 +27,8 @@ class MessagesController < ApplicationController
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         MessageSerializer.new(message)).serializable_hash
       # binding.pry
-      MessagesChannel.broadcast_to discussion, serialized_data 
+      # MessagesChannel.broadcast_to discussion, serialized_data 
+      ActionCable.server.broadcast "messages_channel", serialized_data
       head :ok
 
       # serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1 }
