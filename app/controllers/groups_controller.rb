@@ -1,8 +1,8 @@
 class GroupsController < ApplicationController
 	def index
 		user = @current_user
-		groups = user.groups
-		render json: GroupSerializer.new(groups).to_serialized_json
+		@groups = user.groups
+		render json: @groups, current_user_id: user.id	
 	end
 
 	def create
@@ -17,6 +17,7 @@ class GroupsController < ApplicationController
 			end
 		end
 
-		render json: GroupSerializer.new(group).to_serialized_json
+		render json: @group, current_user_id: user.id	
+		# render json: GroupSerializer.new(group).to_serialized_json
 	end
 end
