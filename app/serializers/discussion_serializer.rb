@@ -2,9 +2,17 @@ class DiscussionSerializer < ActiveModel::Serializer
 	attributes :id, :name, :group_id, :unread_messages_count, :created_at
 	has_one :article
 	has_many :comments
+	# has_many :unread_messages
 	# has_many :messages
 	belongs_to :group 
 	
+	# def unread_messages
+	# 	{
+	# 		discussion_id: object.id
+	# 		unread_messages: object.discussion_unread_messages.with_discussion_id(object.id).with_user_id(@instance_options[:current_user_id]).first.unread_messages
+	# 	}
+	# end
+
 	def unread_messages_count
 		# binding.pry
 		object.discussion_unread_messages.with_discussion_id(object.id).with_user_id(@instance_options[:current_user_id]).first.unread_messages
@@ -33,12 +41,12 @@ class DiscussionSerializer < ActiveModel::Serializer
 				discussion_id: object.id,
 				user_id: comment.user_id,
 				user: { name: comment.user.name },
-				facts: comment.facts.collect do |fact|
-					{
-						content: fact.content,
-						comment_id: fact.comment_id
-					}
-				end
+				# facts: comment.facts.collect do |fact|
+				# 	{
+				# 		content: fact.content,
+				# 		comment_id: fact.comment_id
+				# 	}
+				# end
 			}
 		end
 	end
