@@ -8,9 +8,12 @@ class GroupsController < ApplicationController
 	def create
 		user = @current_user
 		group = Group.new(name: params[:groupName])
-		
+		binding.pry
 		if group.valid?
 			group.save
+			
+			group.users << user
+
 			params[:memberIds].each do |memberId|
 				user = User.find(memberId)
 				group.users << user
