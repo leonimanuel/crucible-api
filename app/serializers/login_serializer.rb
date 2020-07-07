@@ -35,7 +35,8 @@ class LoginSerializer < ActiveModel::Serializer
         }
       end
     end
-    return memberArray[0]
+    # binding.pry
+    return memberArray.flatten
   end
 
 end
