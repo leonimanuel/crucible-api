@@ -30,7 +30,6 @@ class DiscussionSerializer < ActiveModel::Serializer
 
 	def comments
 		object.comments.collect do |comment|
-			
 			{
 				content: comment.content,
 				span_id: comment.span_id,
@@ -41,12 +40,12 @@ class DiscussionSerializer < ActiveModel::Serializer
 				discussion_id: object.id,
 				user_id: comment.user_id,
 				user: { name: comment.user.name },
-				# facts: comment.facts.collect do |fact|
-				# 	{
-				# 		content: fact.content,
-				# 		comment_id: fact.comment_id
-				# 	}
-				# end
+				facts: comment.facts.collect do |fact|
+					{
+						content: fact.content,
+						comment_id: comment.id
+					}
+				end
 			}
 		end
 	end
