@@ -26,11 +26,13 @@ class FactsController < ApplicationController
 				render json: FactSerializer.new(fact).to_serialized_json				
 			end
 		else
-			fact = Fact.new(content: params[:selected_text], url: params[:selection_url])
+			fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")
 			if fact.valid?
 				# binding.pry
 				fact.save
 				user.topics.find_by(name: "New Facts").facts << fact 
+				
+
 				render json: FactSerializer.new(fact).to_serialized_json
 			else				
 				render json: {error: "could not save fact"}

@@ -7,4 +7,8 @@ class Fact < ApplicationRecord
 
 	has_many :facts_comments
 	has_many :comments, through: :facts_comments
+
+
+
+  scope :pending_review, -> { where(review_status: "pending") }
 end
