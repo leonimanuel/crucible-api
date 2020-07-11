@@ -7,6 +7,7 @@ class GroupsController < ApplicationController
 
 	def create
 		user = @current_user
+		binding.pry
 		@group = Group.new(name: params[:groupName])
 		# binding.pry
 		if @group.valid?
@@ -20,7 +21,6 @@ class GroupsController < ApplicationController
 			end
 		end
 
-		binding.pry
 		render json: @group, current_user_id: user.id	
 		# render json: GroupSerializer.new(group).to_serialized_json
 	end

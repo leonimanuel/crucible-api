@@ -1,4 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
+
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
 # Examples:
@@ -22,6 +22,12 @@ billy.facts << fact1
 billy.facts << fact2
 
 newFacts = Topic.create(name: "New Facts", user: billy)
+newFacts2 = Topic.create(name: "New Facts", user: megan)
+edu = Topic.create(name: "Education", user: megan)
+
+fact5 = Fact.create(content: "Employment in science, technology, engineering and math (STEM) occupations has grown 79% since 1990, from 9.7 million to 17.3 million, outpacing overall U.S. job growth", url: "https://www.pewresearch.org/fact-tank/2018/01/09/7-facts-about-the-stem-workforce/")
+edu.facts << fact5
+
 
 science = Topic.create(name: "Science", user: billy)
 zoo = Topic.create(name: "Zoology", user: billy, parent: science)

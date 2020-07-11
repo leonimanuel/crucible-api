@@ -1,6 +1,6 @@
 class GroupSerializer < ActiveModel::Serializer
   attributes :id, :name
-  has_many :users
+  has_many :members
   has_many :discussions
 
   def discussions
@@ -15,13 +15,15 @@ class GroupSerializer < ActiveModel::Serializer
   	end	
   end
 
-  def users
+  def members
   	users = object.users.collect do |user|
   		if user.id != @instance_options[:current_user_id]
-		  	{name: user.name, id: user.id}
+		  	binding.pry
+        {name: user.name, id: user.id}
   		end
   	end
 
-  	users = users.compact
+  	binding.pry
+    users = users.compact
   end
 end

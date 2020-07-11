@@ -61,6 +61,7 @@ class DiscussionsController < ApplicationController
 			@discussion = group.discussions.find_by(name: discussion_name) 
 			# binding.pry
 			# render json: @discussion, serializer(DiscussionSerializer)
+			# binding.pry
 			render json: @discussion, current_user_id: user.id		
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else

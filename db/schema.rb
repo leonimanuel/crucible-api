@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_30_110047) do
+ActiveRecord::Schema.define(version: 2020_07_11_082336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,9 @@ ActiveRecord::Schema.define(version: 2020_06_30_110047) do
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "logic_upvotes"
+    t.integer "logic_downvotes"
+    t.string "review_status"
   end
 
   create_table "facts_comments", force: :cascade do |t|
@@ -73,6 +76,19 @@ ActiveRecord::Schema.define(version: 2020_06_30_110047) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
     t.index ["fact_id"], name: "index_facts_comments_on_fact_id"
+  end
+
+  create_table "facts_reviews", force: :cascade do |t|
+    t.bigint "fact_id", null: false
+    t.bigint "user_id", null: false
+    t.string "review_type"
+    t.string "review_result"
+    t.string "review_reason"
+    t.string "review_comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["fact_id"], name: "index_facts_reviews_on_fact_id"
+    t.index ["user_id"], name: "index_facts_reviews_on_user_id"
   end
 
   create_table "facts_users", force: :cascade do |t|
@@ -150,6 +166,8 @@ ActiveRecord::Schema.define(version: 2020_06_30_110047) do
   add_foreign_key "discussion_unread_messages", "users"
   add_foreign_key "facts_comments", "comments"
   add_foreign_key "facts_comments", "facts"
+  add_foreign_key "facts_reviews", "facts"
+  add_foreign_key "facts_reviews", "users"
   add_foreign_key "messages", "discussions"
   add_foreign_key "messages", "users"
   add_foreign_key "messages_users_reads", "messages"
