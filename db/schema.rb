@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_11_082336) do
+ActiveRecord::Schema.define(version: 2020_07_14_061904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,9 +64,9 @@ ActiveRecord::Schema.define(version: 2020_07_11_082336) do
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "logic_upvotes"
-    t.integer "logic_downvotes"
-    t.string "review_status"
+    t.integer "logic_upvotes", default: 0
+    t.integer "logic_downvotes", default: 0
+    t.string "review_status", default: "pending"
   end
 
   create_table "facts_comments", force: :cascade do |t|
