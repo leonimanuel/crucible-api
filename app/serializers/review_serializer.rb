@@ -8,7 +8,9 @@ class ReviewSerializer < ActiveModel::Serializer
 			{	
 				id: fact.id,
 				content: fact.content,
-				url: fact.url
+				url: fact.url,
+				logic_upvotes: fact.logic_upvotes,
+				logic_downvotes: fact.logic_downvotes
 			}
 		end
 	end
