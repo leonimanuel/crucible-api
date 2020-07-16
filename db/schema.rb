@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_16_223453) do
+ActiveRecord::Schema.define(version: 2020_07_16_231345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_223453) do
     t.integer "user_id"
     t.integer "selection_comment_upvotes", default: 0
     t.integer "selection_comment_downvotes", default: 0
+    t.string "review_status", default: "pending"
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 
@@ -82,6 +83,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_223453) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "comment_fact_upvotes", default: 0
     t.integer "comment_fact_downvotes", default: 0
+    t.string "review_status", default: "pending"
     t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
     t.index ["fact_id"], name: "index_facts_comments_on_fact_id"
   end

@@ -8,7 +8,15 @@ class ReviewController < ApplicationController
 
 	def create
 		user = @current_user
-		fact = Fact.find(params[:factId])
+
+		case params[:itemType]
+		when "fact"
+			item = Fact.find(params[:factId])
+		when "comment"
+			item = Comment.find(params[:commentId])
+		when "facts_comment"
+			item = FactsComment.find(params[:factsCommentId])
+		end
 
 		# binding.pry
 		if params[:decision] == "valid"
