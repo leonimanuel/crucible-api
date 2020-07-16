@@ -10,29 +10,28 @@ class ReviewController < ApplicationController
 		user = @current_user
 		fact = Fact.find(params[:factId])
 
-		if params[:reviewType] == "logic"
-			# binding.pry
-			if params[:decision] == "valid"
-				fact.logic_upvotes += 1
-				fact.save
-			elsif params[:decision] == "invalid"
-				fact.logic_downvotes += 1
-				fact.save				
-			end			
+		# binding.pry
+		if params[:decision] == "valid"
+			fact["#{params[:reviewType]}_upvotes"] += 1
+		elsif params[:decision] == "invalid"
+			fact["#{params[:reviewType]}_downvotes"] += 1
 		end
+		# binding.pry		
+		fact.save	
 
 		fact_review = FactsReview.new(fact: fact, user: user, 
-			review_type: params[:reviewType], decision: params[:decision])	
+			review_type: params[:reviewType], review_result: params[:decision])	
 
-		if params[:decision] == "invalid"
-			fact_review.decision_reason = params[:decision_reason]
-			if params[:decision_reason == "other"]
-				fact_review.decision_comment = params[:decision_comment]
-			end
-		end
+		# if params[:decision] == "invalid"
+		# 	fact_review.decision_reason = params[:decision_reason]
+		# 	if params[:decision_reason == "other"]
+		# 		fact_review.decision_comment = params[:decision_comment]
+		# 	end
+		# end
 
 		if fact_review.save
-			render json: ReviewSerializer.new(fact).to_json			
+			# binding.pry
+			render json: ReviewSerializer.new([fact]).to_json			
 		end
 	end
 end

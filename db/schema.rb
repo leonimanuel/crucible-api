@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_14_061904) do
+ActiveRecord::Schema.define(version: 2020_07_16_223453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 2020_07_14_061904) do
     t.integer "endPoint"
     t.string "previous_el_id"
     t.integer "user_id"
+    t.integer "selection_comment_upvotes", default: 0
+    t.integer "selection_comment_downvotes", default: 0
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 
@@ -67,6 +69,10 @@ ActiveRecord::Schema.define(version: 2020_07_14_061904) do
     t.integer "logic_upvotes", default: 0
     t.integer "logic_downvotes", default: 0
     t.string "review_status", default: "pending"
+    t.integer "context_upvotes", default: 0
+    t.integer "context_downvotes", default: 0
+    t.integer "credibility_upvotes", default: 0
+    t.integer "credibility_downvotes", default: 0
   end
 
   create_table "facts_comments", force: :cascade do |t|
@@ -74,6 +80,8 @@ ActiveRecord::Schema.define(version: 2020_07_14_061904) do
     t.bigint "comment_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "comment_fact_upvotes", default: 0
+    t.integer "comment_fact_downvotes", default: 0
     t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
     t.index ["fact_id"], name: "index_facts_comments_on_fact_id"
   end
