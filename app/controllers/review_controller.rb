@@ -8,7 +8,6 @@ class ReviewController < ApplicationController
 
 	def create
 		user = @current_user
-
 		item = params[:itemType].constantize.find(params[:itemId])
 
 		if params[:decision] == "valid"
@@ -16,6 +15,7 @@ class ReviewController < ApplicationController
 		elsif params[:decision] == "invalid"
 			item["#{params[:reviewType]}_downvotes"] += 1
 		end
+
 		item.save	
 
 		user_review = UsersReview.new(

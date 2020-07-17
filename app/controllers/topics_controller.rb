@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
 	def index
-		user = @current_user || User.find(1)
-		render json: TopicSerializer.new(user.topics).to_serialized_json_tree
+		user = @current_user
+		render json: TopicSerializer.new(user.topics, user).to_serialized_json_tree
 		# render json: 
 	end
 

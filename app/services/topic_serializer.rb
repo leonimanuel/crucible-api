@@ -1,6 +1,7 @@
 class TopicSerializer
-	def initialize(topic_object)
+	def initialize(topic_object, user)
 		@topic = topic_object
+		@user = user
 	end
 
 	def to_serialized_json
@@ -20,7 +21,13 @@ class TopicSerializer
 		  {
 		    id: parent.id,
 		    name: parent.name,
-		    facts: parent.facts,
+		    facts: parent.facts.collect do |fact|
+		    	{
+		    		id: fact.id,
+		    		content: fact.content,
+		    		rephrase: fact.fact_rephrases.where(user: @user).last
+		    	}
+		    end,
 				created_at: parent.created_at,
 				updated_at: parent.updated_at,
 				user_id: 1,
