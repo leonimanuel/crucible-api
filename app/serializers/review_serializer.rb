@@ -3,6 +3,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	has_many :facts
 	has_many :comments
 	has_many :facts_comments
+	has_many :fact_rephrases
 
 	def facts
 		# binding.pry
@@ -45,6 +46,19 @@ class ReviewSerializer < ActiveModel::Serializer
 				comment_fact_upvotes: facts_comment.comment_fact_upvotes,
 				comment_fact_downvotes: facts_comment.comment_fact_downvotes		
 			}		
+		end
+	end
+
+	def fact_rephrases
+		FactRephrase.pending_review.all.collect do |fact_rephrase|
+			{
+				type: "FactRephrase",
+				id: fact_rephrase.id,
+				fact_content: Fact.find(fact_rephrase.fact_id).content,
+				rephrase_content: fact_rephrase.content,
+				phrasing_upvotes: fact_rephrase.phrasing_upvotes,
+				phrasing_downvotes: fact_rephrase.phrasing_downvotes,				
+			}
 		end
 	end
 end
