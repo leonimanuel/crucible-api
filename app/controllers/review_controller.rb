@@ -9,27 +9,33 @@ class ReviewController < ApplicationController
 	def create
 		user = @current_user
 
-		case params[:itemType]
-		when "fact"
-			item = Fact.find(params[:factId])
-		when "comment"
-			item = Comment.find(params[:commentId])
-		when "facts_comment"
-			item = FactsComment.find(params[:factsCommentId])
-		end
-
+		# case params[:itemType]
+		# when "fact"
+		# 	item = Fact.find(params[:selectedItemId])
+		# 	FactsReview.new(fact: fact, user: user, review_type: params[:reviewType], review_result: params[:decision])	
+		# when "comment"
+		# 	item = Comment.find(params[:selectedItemId])
+		# when "facts_comment"
+		# 	item = FactsComment.find(params[:selectedItemId])
+		# end
 		# binding.pry
+		item = params[:itemType].constantize.find(params[:itemId])
+		# binding.pry
+		
 		if params[:decision] == "valid"
-			fact["#{params[:reviewType]}_upvotes"] += 1
+			item["#{params[:reviewType]}_upvotes"] += 1
 		elsif params[:decision] == "invalid"
-			fact["#{params[:reviewType]}_downvotes"] += 1
+			item["#{params[:reviewType]}_downvotes"] += 1
 		end
-		# binding.pry		
-		fact.save	
+		item.save	
 
-		fact_review = FactsReview.new(fact: fact, user: user, 
-			review_type: params[:reviewType], review_result: params[:decision])	
-
+		user_review = UsersReview.new(
+			user: @current_user, 
+			review_object: params[:itemType], 
+			object_id: params[:itemId],
+			review_type: params[:reviewType],
+			decision: params[:decision]
+		)
 		# if params[:decision] == "invalid"
 		# 	fact_review.decision_reason = params[:decision_reason]
 		# 	if params[:decision_reason == "other"]
@@ -37,9 +43,10 @@ class ReviewController < ApplicationController
 		# 	end
 		# end
 
-		if fact_review.save
+		if user_review.save
 			# binding.pry
-			render json: ReviewSerializer.new([fact]).to_json			
+			# render json: ReviewSerializer.new([item]).to_json	
+			render json: {status: "success"}	
 		end
 	end
 end

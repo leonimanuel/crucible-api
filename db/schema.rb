@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_16_231345) do
+ActiveRecord::Schema.define(version: 2020_07_17_022639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,17 @@ ActiveRecord::Schema.define(version: 2020_07_16_231345) do
     t.index ["user_id"], name: "index_users_groups_on_user_id"
   end
 
+  create_table "users_reviews", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "review_object"
+    t.integer "object_id"
+    t.string "review_type"
+    t.string "decision"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_users_reviews_on_user_id"
+  end
+
   add_foreign_key "comments", "discussions"
   add_foreign_key "discussion_unread_messages", "discussions"
   add_foreign_key "discussion_unread_messages", "users"
@@ -184,4 +195,5 @@ ActiveRecord::Schema.define(version: 2020_07_16_231345) do
   add_foreign_key "messages_users_reads", "users"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
+  add_foreign_key "users_reviews", "users"
 end

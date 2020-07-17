@@ -8,7 +8,7 @@ class ReviewSerializer < ActiveModel::Serializer
 		# binding.pry
 		object.collect do |fact|
 			{	
-				type: "fact",
+				type: "Fact",
 				id: fact.id,
 				content: fact.content,
 				url: fact.url,
@@ -25,7 +25,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	def comments
 		Comment.pending_review.all.collect do |comment|
 			{	
-				type: "comment",
+				type: "Comment",
 				id: comment.id,
 				selection: comment.selection,
 				content: comment.content,
@@ -38,7 +38,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	def facts_comments
 		FactsComment.pending_review.all.collect do |facts_comment|
 			{	
-				type: "facts_comment",
+				type: "FactsComment",
 				id: facts_comment.id,
 				comment_content: Comment.find(facts_comment.comment_id).content,
 				fact_content: Fact.find(facts_comment.fact_id).content,
