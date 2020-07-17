@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_022639) do
+ActiveRecord::Schema.define(version: 2020_07_17_135817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 2020_07_17_022639) do
     t.text "article_url"
     t.bigint "group_id"
     t.index ["group_id"], name: "index_discussions_on_group_id"
+  end
+
+  create_table "fact_rephrases", force: :cascade do |t|
+    t.bigint "fact_id", null: false
+    t.string "content"
+    t.integer "phrasing_upvotes", default: 0
+    t.integer "phrasing_downvotes", default: 0
+    t.string "review_status", default: "pending"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["fact_id"], name: "index_fact_rephrases_on_fact_id"
   end
 
   create_table "facts", force: :cascade do |t|
@@ -185,6 +196,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_022639) do
   add_foreign_key "comments", "discussions"
   add_foreign_key "discussion_unread_messages", "discussions"
   add_foreign_key "discussion_unread_messages", "users"
+  add_foreign_key "fact_rephrases", "facts"
   add_foreign_key "facts_comments", "comments"
   add_foreign_key "facts_comments", "facts"
   add_foreign_key "facts_reviews", "facts"
