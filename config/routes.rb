@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :topics
-  resources :facts
+  resources :facts do
+    post "/rephrases" => "rephrases#create"
+  end
   resources :users
   resources :groups, only: [:index, :create] do
 	  resources :discussions, only: [:create, :show] do

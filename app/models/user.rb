@@ -15,4 +15,6 @@ class User < ApplicationRecord
 	has_many :messages
 
 	has_many :topics_facts
+
+	has_many :fact_rephrases
 end
