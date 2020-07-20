@@ -15,9 +15,38 @@ class ReviewController < ApplicationController
 		elsif params[:decision] == "invalid"
 			item["#{params[:reviewType]}_downvotes"] += 1
 		end
+		item.save
 
-		item.save	
+		binding.pry
+		keys = item.attributes.map do |key, value| 
+			key if key.include?("votes")
+		end
+		keys = keys.compact
 
+		binding.pry
+		score_reviews = keys.each_with_index.map do |attr, index| 
+			if index.even?
+				upvotes = item[keys[index]]
+				downvotes = item[keys[index+1]]
+				if upvotes > downvotes
+					{total: upvotes + downvotes, status: "pass"}
+				else
+					{total: upvotes + downvotes, status: "fail"}
+				end
+			end
+			# item[keys[index]] + item[keys[index+1]] if index.even?
+		end
+		score_reviews = score_reviews.compact
+
+		binding.pry
+		if score_reviews.all? { |review| review[:total] >= 10 }
+			if score.reviews.all? { |review| review[:status] == "pass" }
+				item.update(review_status: "pass")
+			else
+				item.update(review_status: "fail")
+			end
+		end
+		binding.pry
 		user_review = UsersReview.new(
 			user: @current_user, 
 			review_object: params[:itemType], 
