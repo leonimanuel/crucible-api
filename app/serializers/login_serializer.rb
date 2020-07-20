@@ -52,13 +52,10 @@ class LoginSerializer < ActiveModel::Serializer
         context_downvotes: fact.context_downvotes,
         credibility_upvotes: fact.credibility_upvotes,
         credibility_downvotes: fact.credibility_downvotes,
-        review_status: fact.review_status
+        review_status: fact.review_status,
+        topic_id: TopicsFact.where(topic: Topic.where(user: object).map {|t| t.id }).where(fact_id: fact.id).first.topic_id
       }
     end
   end
 end
-
-
-
-
 
