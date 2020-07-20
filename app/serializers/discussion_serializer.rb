@@ -45,6 +45,17 @@ class DiscussionSerializer < ActiveModel::Serializer
 						content: fact.content,
 						comment_id: comment.id
 					}
+				end,
+				selection_comment_upvotes: comment.selection_comment_upvotes,
+				selection_comment_downvotes: comment.selection_comment_downvotes,
+				review_status: comment.review_status,
+				
+				facts_comments_reviews: FactsComment.where(comment: comment).collect do |fact_comment|
+					{	
+						comment_fact_upvotes: fact_comment.comment_fact_upvotes,
+						comment_fact_downvotes: fact_comment.comment_fact_downvotes,
+						review_status: fact_comment.review_status
+					}
 				end
 			}
 		end
