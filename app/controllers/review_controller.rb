@@ -17,13 +17,11 @@ class ReviewController < ApplicationController
 		end
 		item.save
 
-		binding.pry
 		keys = item.attributes.map do |key, value| 
 			key if key.include?("votes")
 		end
 		keys = keys.compact
 
-		binding.pry
 		score_reviews = keys.each_with_index.map do |attr, index| 
 			if index.even?
 				upvotes = item[keys[index]]
@@ -34,11 +32,9 @@ class ReviewController < ApplicationController
 					{total: upvotes + downvotes, status: "fail"}
 				end
 			end
-			# item[keys[index]] + item[keys[index+1]] if index.even?
 		end
 		score_reviews = score_reviews.compact
 
-		binding.pry
 		if score_reviews.all? { |review| review[:total] >= 10 }
 			if score.reviews.all? { |review| review[:status] == "pass" }
 				item.update(review_status: "pass")
@@ -46,7 +42,7 @@ class ReviewController < ApplicationController
 				item.update(review_status: "fail")
 			end
 		end
-		binding.pry
+		
 		user_review = UsersReview.new(
 			user: @current_user, 
 			review_object: params[:itemType], 
