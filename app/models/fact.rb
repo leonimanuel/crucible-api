@@ -1,5 +1,5 @@
 class Fact < ApplicationRecord
-	has_many :fact_rephrases
+	has_one :fact_rephrase
 
 	# has_many :facts_users
 	# has_many :users, through: :facts_users

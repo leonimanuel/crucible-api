@@ -2,7 +2,8 @@ class FactSerializer < ActiveModel::Serializer
 	attributes :id, :content, :rephrase, :logic_upvotes, :logic_downvotes, :context_upvotes, :context_downvotes, :credibility_upvotes, :credibility_downvotes, :review_status, :topic_id
 
 	def rephrase
-		object.fact_rephrases.where(user_id: @instance_options[:current_user_id]).last
+		object.fact_rephrase
+		# object.fact_rephrases.where(user_id: @instance_options[:current_user_id]).last
 	end
 
   def topic_id

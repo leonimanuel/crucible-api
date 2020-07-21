@@ -45,7 +45,7 @@ class LoginSerializer < ActiveModel::Serializer
       {
         id: fact.id,
         content: fact.content,
-        rephrase: fact.fact_rephrases.where(user: object).last,
+        rephrase: fact.fact_rephrase,
         logic_upvotes: fact.logic_upvotes,
         logic_downvotes: fact.logic_downvotes,
         context_upvotes: fact.context_upvotes,
