@@ -23,6 +23,30 @@ class CommentsController < ApplicationController
       ActionCable.server.broadcast "comments_channel", serialized_data
     head :ok
 		# render json: CommentSerializer.new(comment).to_serialized_json
+
+    message = Message.new(text: params[:comment_text], discussion: discussion, user: user, message_type: "comment", previous_el_id: params[:previous_el_id])
+    if message.save
+      recipients = message.discussion.users.select do |user|
+        user.id != message.user_id
+      end
+
+      recipients.each do |recipient|
+        MessagesUsersRead.create(message: message, discussion: discussion, user: recipient, read: false)
+      end
+
+      recipients.each do |recipient|
+        DiscussionUnreadMessage.with_discussion_id(discussion.id).find_by(user_id: recipient.id).update(unread_messages: MessagesUsersRead.unread.with_user_id(recipient.id).with_discussion_id(discussion.id).count)
+      end
+
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        MessageSerializer.new(message)).serializable_hash
+        ActionCable.server.broadcast "messages_channel", serialized_data
+      head :ok
+
+      serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1, sender_id: user.id}
+      ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data
+      head :ok
+    end
 	end
 
 	def show
@@ -38,26 +62,7 @@ class CommentsController < ApplicationController
 end
 
 
-    # message = Message.new(text: params[:content], discussion: discussion, user: user, message_type: "comment", previous_el_id: params[:previous_el_id])
-    # if message.save
-    #   recipients = message.discussion.users.select do |user|
-    #     user.id != message.user_id
-    #   end
 
-    #   recipients.each do |recipient|
-    #     MessagesUsersRead.create(message: message, discussion: discussion, user: recipient, read: false)
-    #   end
 
-    #   recipients.each do |recipient|
-    #     DiscussionUnreadMessage.with_discussion_id(discussion.id).find_by(user_id: recipient.id).update(unread_messages: MessagesUsersRead.unread.with_user_id(recipient.id).with_discussion_id(discussion.id).count)
-    #   end
 
-    #   serialized_data = ActiveModelSerializers::Adapter::Json.new(
-    #     MessageSerializer.new(message)).serializable_hash
-    #     ActionCable.server.broadcast "messages_channel", serialized_data
-    #   head :ok
 
-    #   serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1, sender_id: user.id}
-    #   ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data
-    #   head :ok
-    # end
