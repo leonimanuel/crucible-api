@@ -1,5 +1,5 @@
 class LoginSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email
+  attributes :id, :name, :email, :review_score
   has_many :groups
   has_many :group_members
   has_many :discussions
@@ -56,6 +56,10 @@ class LoginSerializer < ActiveModel::Serializer
         topic_id: TopicsFact.where(topic: Topic.where(user: object).map {|t| t.id }).where(fact_id: fact.id).first.topic_id
       }
     end
+  end
+
+  def review_score
+    UsersReview.where(user: object).count * 10
   end
 end
 
