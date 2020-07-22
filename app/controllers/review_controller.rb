@@ -9,7 +9,7 @@ class ReviewController < ApplicationController
 	def create
 		user = @current_user
 		item = params[:itemType].constantize.find(params[:itemId])
-
+		# binding.pry
 		if params[:decision] == "valid"
 			item["#{params[:reviewType]}_upvotes"] += 1
 		elsif params[:decision] == "invalid"
@@ -20,12 +20,17 @@ class ReviewController < ApplicationController
 		keys = item.attributes.map do |key, value| 
 			key if key.include?("votes")
 		end
-		keys = keys.compact
+		keys = keys.compact.sort
 
+		item_upvotes = 0
+		item_downvotes = 0
 		score_reviews = keys.each_with_index.map do |attr, index| 
 			if index.even?
-				upvotes = item[keys[index]]
-				downvotes = item[keys[index+1]]
+				upvotes = item[keys[index + 1]]
+				downvotes = item[keys[index]]
+
+				item_upvotes += upvotes
+				item_downvotes += downvotes
 				if upvotes > downvotes
 					{total: upvotes + downvotes, status: "pass"}
 				else
@@ -35,14 +40,15 @@ class ReviewController < ApplicationController
 		end
 		score_reviews = score_reviews.compact
 
+		# binding.pry
 		if score_reviews.all? { |review| review[:total] >= 10 }
-			if score.reviews.all? { |review| review[:status] == "pass" }
-				item.update(review_status: "pass")
+			if score_reviews.all? { |review| review[:status] == "pass" }
+				item.update(review_status: "pass", grade: item_upvotes.to_f / (item_upvotes + item_downvotes))
 			else
-				item.update(review_status: "fail")
+				item.update(review_status: "fail", grade: item_upvotes.to_f / (item_upvotes + item_downvotes))
 			end
 		end
-		
+		# binding.pry
 		user_review = UsersReview.new(
 			user: @current_user, 
 			review_object: params[:itemType], 

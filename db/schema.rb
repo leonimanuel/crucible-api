@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_21_022350) do
+ActiveRecord::Schema.define(version: 2020_07_22_133555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_022350) do
     t.integer "selection_comment_upvotes", default: 0
     t.integer "selection_comment_downvotes", default: 0
     t.string "review_status", default: "pending"
+    t.float "grade"
     t.index ["discussion_id"], name: "index_comments_on_discussion_id"
   end
 
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_022350) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+    t.float "grade"
     t.index ["fact_id"], name: "index_fact_rephrases_on_fact_id"
   end
 
@@ -86,6 +88,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_022350) do
     t.integer "context_downvotes", default: 0
     t.integer "credibility_upvotes", default: 0
     t.integer "credibility_downvotes", default: 0
+    t.float "grade"
   end
 
   create_table "facts_comments", force: :cascade do |t|
@@ -96,6 +99,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_022350) do
     t.integer "comment_fact_upvotes", default: 0
     t.integer "comment_fact_downvotes", default: 0
     t.string "review_status", default: "pending"
+    t.float "grade"
     t.index ["comment_id"], name: "index_facts_comments_on_comment_id"
     t.index ["fact_id"], name: "index_facts_comments_on_fact_id"
   end

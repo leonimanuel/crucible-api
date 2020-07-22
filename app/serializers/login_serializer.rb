@@ -1,5 +1,5 @@
 class LoginSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :review_score
+  attributes :id, :name, :email, :review_score, :reputability_score
   has_many :groups
   has_many :group_members
   has_many :discussions
@@ -60,6 +60,26 @@ class LoginSerializer < ActiveModel::Serializer
 
   def review_score
     UsersReview.where(user: object).count * 10
+  end
+
+  def reputability_score
+    items = [Fact.where.not(grade: nil), FactRephrase.where.not(grade: nil), Comment.where.not(grade: nil), FactsComment.where.not(grade: nil)]
+    array = items.map do |item_array| 
+      item_array.average(:grade).to_f if !item_array.empty?
+    end
+    # binding.pry
+    array = array.compact
+    # array = [Fact.average(:grade), FactRephrase.average(:grade), Comment.average(:grade), FactsComment.average(:grade)]
+    # binding.pry
+    if array.empty? #{ |item| item == nil }
+      "No score yet"
+    else
+      numerator = array.reduce(0) { |a, v| a + v }
+      denominator = array.count
+      mean = numerator.to_f / denominator.to_f 
+      # binding.pry
+      mean      
+    end
   end
 end
 
