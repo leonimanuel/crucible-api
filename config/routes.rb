@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 	  end	
   end
 
+  get "/interests" => "interests#index"
+
   get "/review" => "review#index"
   post "/review" => "review#create"
   # post "users/:email", to: "users#show"

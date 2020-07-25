@@ -16,7 +16,7 @@ class ReviewController < ApplicationController
 			item["#{params[:reviewType]}_downvotes"] += 1
 		end
 		item.save
-
+		# binding.pry
 		keys = item.attributes.map do |key, value| 
 			key if key.include?("votes")
 		end

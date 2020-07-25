@@ -21,8 +21,9 @@ class FactsController < ApplicationController
 			if user.facts.include?(fact)
 				render json: {error: "you've already collected this fact"}
 			else
-				user.topics.find_by(name: "New Facts").facts << fact
-				render json: FactSerializer.new(fact).to_serialized_json				
+				topic = user.topics.find_by(name: "New Facts")
+				topic.facts << fact
+				render json: @fact, topic_id: topic.id				
 			end
 		else
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")

@@ -3,6 +3,8 @@ class ReviewSerializer < ActiveModel::Serializer
 	has_many :facts
 	has_many :comments
 	has_many :facts_comments
+
+
 	# has_many :fact_rephrases
 
 	def facts
@@ -30,7 +32,9 @@ class ReviewSerializer < ActiveModel::Serializer
 					context_upvotes: fact.context_upvotes,
 					context_downvotes: fact.context_downvotes,
 					credibility_upvotes: fact.credibility_upvotes,
-					credibility_downvotes: fact.credibility_downvotes			
+					credibility_downvotes: fact.credibility_downvotes,
+
+					score: 0	
 				}
 			end
 		end				

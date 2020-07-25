@@ -11,10 +11,17 @@ class User < ApplicationRecord
 	has_many :users_groups
 	has_many :groups, through: :users_groups
 	has_many :discussions, through: :groups
+
+	has_many :guests_guest_discussions
+	has_many :guest_discussions, through: :guests_guest_discussions
+
 	has_many :comments
 	has_many :messages
 
 	has_many :topics_facts
 
 	has_many :fact_rephrases
+
+	has_many :users_interests
+	has_many :interests, through: :users_interests
 end

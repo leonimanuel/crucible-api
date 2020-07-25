@@ -9,6 +9,9 @@ class Discussion < ApplicationRecord
 	has_many :messages_users_reads
 	has_many :discussion_unread_messages
 
+	has_many :guests_guest_discussions
+	has_many :guests, through: :guests_guest_discussions
+
 	def unread_messages
 		return DiscussionUnreadMessage.all.where(user_id: 3)
 	end

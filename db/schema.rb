@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_133555) do
+ActiveRecord::Schema.define(version: 2020_07_25_212113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,23 @@ ActiveRecord::Schema.define(version: 2020_07_22_133555) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "guests_guest_discussions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discussion_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discussion_id"], name: "index_guests_guest_discussions_on_discussion_id"
+    t.index ["user_id"], name: "index_guests_guest_discussions_on_user_id"
+  end
+
+  create_table "interests", force: :cascade do |t|
+    t.string "section"
+    t.string "title"
+    t.string "query"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "text"
     t.bigint "discussion_id", null: false
@@ -189,6 +206,15 @@ ActiveRecord::Schema.define(version: 2020_07_22_133555) do
     t.index ["user_id"], name: "index_users_groups_on_user_id"
   end
 
+  create_table "users_interests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "interest_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["interest_id"], name: "index_users_interests_on_interest_id"
+    t.index ["user_id"], name: "index_users_interests_on_user_id"
+  end
+
   create_table "users_reviews", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "review_object"
@@ -208,11 +234,15 @@ ActiveRecord::Schema.define(version: 2020_07_22_133555) do
   add_foreign_key "facts_comments", "facts"
   add_foreign_key "facts_reviews", "facts"
   add_foreign_key "facts_reviews", "users"
+  add_foreign_key "guests_guest_discussions", "discussions"
+  add_foreign_key "guests_guest_discussions", "users"
   add_foreign_key "messages", "discussions"
   add_foreign_key "messages", "users"
   add_foreign_key "messages_users_reads", "messages"
   add_foreign_key "messages_users_reads", "users"
   add_foreign_key "users_groups", "groups"
   add_foreign_key "users_groups", "users"
+  add_foreign_key "users_interests", "interests"
+  add_foreign_key "users_interests", "users"
   add_foreign_key "users_reviews", "users"
 end

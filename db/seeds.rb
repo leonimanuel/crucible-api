@@ -12,6 +12,11 @@ megan = User.create(name: "Megan", email: "megan@aol.com", password: "greenbeans
 ben = User.create(name: "Ben", email: "ben@gmail.com", password: "fishsticks")
 luke = User.create(name: "Luke", email: "luke@yahoo.com", password: "milkmaid")
  
+User.all.map do |user|
+	feed = Group.create(name: "Feed")
+	feed.users << user
+end
+
 fact1 = Fact.create(content: "pandas are big", url: "pandas.com")
 fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
 fact5 = Fact.create(content: "Employment in science, technology, engineering and math (STEM) occupations has grown 79% since 1990, from 9.7 million to 17.3 million, outpacing overall U.S. job growth", url: "https://www.pewresearch.org/fact-tank/2018/01/09/7-facts-about-the-stem-workforce/")
