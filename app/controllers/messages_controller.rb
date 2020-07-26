@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
     message = Message.new(text: params[:text], discussion: discussion, user: user)
 
     if message.save
-      recipients = message.discussion.users.select do |user|
+      recipients = message.discussion.users_and_guests.select do |user|
         user.id != message.user_id
       end
 

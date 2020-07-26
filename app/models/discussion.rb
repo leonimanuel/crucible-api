@@ -12,6 +12,12 @@ class Discussion < ApplicationRecord
 	has_many :guests_guest_discussions
 	has_many :guests, through: :guests_guest_discussions, source: :user
 
+  def users_and_guests
+  	users = self.users.map {|user| user}
+  	guests = self.guests.map {|guest| guest}
+  	users_and_guests = users.concat(guests)
+  end
+
 	def unread_messages
 		return DiscussionUnreadMessage.all.where(user_id: 3)
 	end
@@ -19,4 +25,6 @@ class Discussion < ApplicationRecord
 	def unread_messages_by_user
 		return DiscussionSerializer.unread_messages_by_user
 	end
+
+
 end
