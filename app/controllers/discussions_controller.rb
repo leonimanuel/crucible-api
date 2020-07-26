@@ -16,7 +16,12 @@ class DiscussionsController < ApplicationController
 
 		user = @current_user
 		if Group.find(params[:group_id]).name === "Feed"
-			interest = user.interests.sample
+			if user.interests.empty?
+				return render json: { error: "please select at least one interest for article recommendations" }, status: :failed_dependency
+			else
+				interest = user.interests.sample
+			end
+
 			all_sites = %w(nytimes.com wsj.com washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
 			sites = %w(washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
 			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
