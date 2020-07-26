@@ -30,7 +30,6 @@ class LoginSerializer < ActiveModel::Serializer
       }      
     end
     allDiscussions = member_discussions.concat(guest_discussions)
-    allDiscussions
   end
 
   def groups

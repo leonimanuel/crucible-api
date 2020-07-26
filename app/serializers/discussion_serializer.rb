@@ -1,5 +1,5 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :group_id, :unread_messages_count, :created_at, :article_url
+	attributes :id, :name, :access, :group_id, :unread_messages_count, :created_at, :article_url
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages
@@ -14,8 +14,15 @@ class DiscussionSerializer < ActiveModel::Serializer
 	# 	}
 	# end
 
+	def access
+		if object.guests.include?(User.find(@instance_options[:current_user_id]))
+			"guest"
+		else
+			"member"
+		end
+	end
+
 	def unread_messages_count
-		# binding.pry
 		object.discussion_unread_messages.with_discussion_id(object.id).with_user_id(@instance_options[:current_user_id]).first.unread_messages
 	end
 

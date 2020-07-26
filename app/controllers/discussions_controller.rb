@@ -79,8 +79,8 @@ class DiscussionsController < ApplicationController
 			)
 			# binding.pry
 			if Group.find(params[:group_id]).name == "Feed"
-				@discussion.guests << User.where.not(user: user).sample
-				binding.pry
+				@discussion.guests << User.where.not(id: user.id).sample
+				# binding.pry
 			end
 
 			@discussion.users.each do |member|
@@ -99,13 +99,10 @@ class DiscussionsController < ApplicationController
 		user = @current_user
 		group_name = params[:group_id].split("-").join(" ")
 		discussion_name = params[:id]
-		# binding.pry
-		group = @current_user.groups.find_by(name: group_name)
-		if group
-			@discussion = group.discussions.find_by(name: discussion_name) 
-			# binding.pry
+		# group = @current_user.groups.find_by(name: group_name)
+		@discussion = Discussion.find_by(name: params[:id])
+		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
-			# binding.pry
 			render json: @discussion, current_user_id: user.id		
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
