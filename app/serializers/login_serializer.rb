@@ -6,15 +6,43 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :facts
 
   def discussions
-  	object.discussions.collect do |discussion|
-  		{ 
-  			id: discussion.id, 
-  			name: discussion.name,
-  			group_id: discussion.group_id,
-        unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
-  		  created_at: discussion.created_at
-      }
-  	end	
+    # allDiscussions = object.discussions.push(object.guest_discussions)
+    member_discussions = object.discussions.collect do |discussion|
+      { 
+        access: "member",
+        id: discussion.id, 
+        name: discussion.name,
+        group_id: discussion.group_id,
+        # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
+        created_at: discussion.created_at
+      }      
+    end
+
+    guest_discussions = object.guest_discussions.collect do |discussion|
+      # binding.pry
+      { 
+        access: "guest",
+        id: discussion.id, 
+        name: discussion.name,
+        group_id: discussion.group_id,
+        # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
+        created_at: discussion.created_at
+      }      
+    end
+
+    allDiscussions = member_discussions.concat(guest_discussions)
+    # binding.pry
+    allDiscussions
+
+  	# object.discussions.collect do |discussion|
+  	# 	{ 
+  	# 		id: discussion.id, 
+  	# 		name: discussion.name,
+  	# 		group_id: discussion.group_id,
+   #      unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
+  	# 	  created_at: discussion.created_at
+   #    }
+  	# end	
   end
 
   def groups
