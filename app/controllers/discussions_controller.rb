@@ -77,14 +77,19 @@ class DiscussionsController < ApplicationController
 				content: json_response["articleBodyHtml"], 
 				discussion: @discussion
 			)
-
-			if Group.find(params[:group_id]) == "Feed"
+			# binding.pry
+			if Group.find(params[:group_id]).name == "Feed"
 				@discussion.guests << User.where.not(user: user).sample
+				binding.pry
 			end
-			
+
 			@discussion.users.each do |member|
 				DiscussionUnreadMessage.create(user: member, discussion: @discussion, unread_messages: 0)
 			end
+
+			@discussion.guests.each do |guest|
+				DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
+			end			
 
 			render json: @discussion, current_user_id: user.id		
 		end
