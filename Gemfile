@@ -22,7 +22,7 @@ gem "simple_command"
 gem "faraday"
 gem 'aylien_text_api'
 gem "curb"
-
+gem "rest-client"
 gem "dotenv-rails"
 
 gem "ancestry"

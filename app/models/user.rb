@@ -13,7 +13,7 @@ class User < ApplicationRecord
 	has_many :discussions, through: :groups
 
 	has_many :guests_guest_discussions
-	has_many :guest_discussions, through: :guests_guest_discussions
+	has_many :guest_discussions, through: :guests_guest_discussions, , source: :user
 
 	has_many :comments
 	has_many :messages

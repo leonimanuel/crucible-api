@@ -5,6 +5,12 @@ class InterestsController < ApplicationController
 		render json: @interests, current_user_id: user.id
 	end
 
+	# def create
+	# 	user = @current_user
+	# 	interest = user.interests.sample
+		
+	# end
+
 	def update
 		user = @current_user
 		# binding.pry
@@ -14,7 +20,7 @@ class InterestsController < ApplicationController
 		else
 			user.interests << @interest
 		end
-
+		# binding.pry
 		@interests = Interest.all
 		render json: @interests, current_user_id: user.id
 	end

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 	  end	
   end
 
-  resources :interests, only: [:index, :update]
+  resources :interests, only: [:index, :update, :create]
 
   get "/review" => "review#index"
   post "/review" => "review#create"

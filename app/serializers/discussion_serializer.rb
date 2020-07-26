@@ -1,10 +1,11 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :group_id, :unread_messages_count, :created_at
+	attributes :id, :name, :group_id, :unread_messages_count, :created_at, :article_url
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages
 	# has_many :messages
 	belongs_to :group 
+	has_many :guests
 	
 	# def unread_messages
 	# 	{
@@ -78,6 +79,15 @@ class DiscussionSerializer < ActiveModel::Serializer
 
 	def group
 		{name: object.group.name}
+	end
+
+	def guests
+		object.guests.collect do |guest|
+			{
+				id: guest.id,
+				name: guest.name
+			}
+		end
 	end
 end
 
