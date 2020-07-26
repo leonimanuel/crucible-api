@@ -29,20 +29,8 @@ class LoginSerializer < ActiveModel::Serializer
         created_at: discussion.created_at
       }      
     end
-
     allDiscussions = member_discussions.concat(guest_discussions)
-    # binding.pry
     allDiscussions
-
-  	# object.discussions.collect do |discussion|
-  	# 	{ 
-  	# 		id: discussion.id, 
-  	# 		name: discussion.name,
-  	# 		group_id: discussion.group_id,
-   #      unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
-  	# 	  created_at: discussion.created_at
-   #    }
-  	# end	
   end
 
   def groups
