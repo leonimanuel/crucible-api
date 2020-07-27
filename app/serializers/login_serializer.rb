@@ -42,7 +42,7 @@ class LoginSerializer < ActiveModel::Serializer
   end
 
   def group_members
-    memberArray = object.groups.collect do |group|
+    member_array = object.groups.collect do |group|
       group.users.collect do |user|
         {
           id: user.id,
@@ -51,8 +51,18 @@ class LoginSerializer < ActiveModel::Serializer
         }
       end
     end
-    # binding.pry
-    return memberArray.flatten
+    # object.groups.find_by(name: "Guest").discussions.collect
+
+    feed_owner_array = object.guest_discussions.map do |discussion|
+      # binding.pry
+      {
+        id: discussion.users.first.id,
+        name: discussion.users.first.name, 
+        group_id: discussion.group_id
+      }
+    end
+    binding.pry
+    return member_array.concat(feed_owner_array).flatten.uniq
   end
 
   def facts
