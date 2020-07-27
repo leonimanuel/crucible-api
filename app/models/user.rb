@@ -12,6 +12,8 @@ class User < ApplicationRecord
 	has_many :groups, through: :users_groups
 	has_many :discussions, through: :groups
 
+	has_many :admin_discussions, foreign_key: "admin_id", class_name: "Discussion"
+
 	has_many :guests_guest_discussions
 	has_many :guest_discussions, through: :guests_guest_discussions, source: :discussion
 

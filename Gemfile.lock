@@ -168,6 +168,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     simple_command (0.1.0)
+    slugify (1.0.7)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -215,6 +216,7 @@ DEPENDENCIES
   redis (~> 4.0)
   rest-client
   simple_command
+  slugify (~> 1.0, >= 1.0.7)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data

@@ -74,7 +74,15 @@ class DiscussionsController < ApplicationController
 		# binding.pry
 
 		if json_response
-			@discussion = Discussion.create(name: json_response["headline"].split(" ").join("_"), group: Group.find(params[:group_id]), article_url: article_url)
+			binding.pry
+			@discussion = Discussion.create(
+				name: json_response["headline"], 
+				slug: json_response["headline"].slugify,
+				group: Group.find(params[:group_id]), 
+				article_url: article_url,
+				admin: user
+			)
+			
 			article = Article.create(
 				title: json_response["headline"], 
 				author: json_response["author"],
@@ -84,17 +92,19 @@ class DiscussionsController < ApplicationController
 			)
 			# binding.pry
 			if Group.find(params[:group_id]).name == "Feed"
-				@discussion.guests << User.where.not(id: user.id).sample
+				guest = User.where.not(id: user.id).sample
+				@discussion.guests << guest
+				# guest.groups.find_by(name: "Guest") << @discussion
 				# binding.pry
 			end
 
-			@discussion.users.each do |member|
-				DiscussionUnreadMessage.create(user: member, discussion: @discussion, unread_messages: 0)
+			@discussion.users_and_guests.each do |user|
+				DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
 			end
 
-			@discussion.guests.each do |guest|
-				DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
-			end			
+			# @discussion.guests.each do |guest|
+			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
+			# end			
 
 			render json: @discussion, current_user_id: user.id		
 		end
@@ -103,9 +113,10 @@ class DiscussionsController < ApplicationController
 	def show
 		user = @current_user
 		group_name = params[:group_id].split("-").join(" ")
-		discussion_name = params[:id]
+		# discussion_name = params[:id]
 		# group = @current_user.groups.find_by(name: group_name)
-		@discussion = Discussion.find_by(name: params[:id])
+		@discussion = Discussion.find_by(slug: params[:id])
+		# binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
 			render json: @discussion, current_user_id: user.id		

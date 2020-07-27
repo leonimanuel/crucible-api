@@ -25,6 +25,8 @@ gem "curb"
 gem "rest-client"
 gem "dotenv-rails"
 
+gem 'slugify', '~> 1.0', '>= 1.0.7'
+
 gem "ancestry"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
