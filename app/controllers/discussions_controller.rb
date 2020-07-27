@@ -12,7 +12,6 @@ class DiscussionsController < ApplicationController
 		# uri = URI('https://gnews.io/api/v3/search?q=uighur detention camps?&token=a3cbbbace66491b895eb064379755ca7')
 		# thing = Net::HTTP.get(uri) # => String
 		# suggestions = JSON.parse(thing)
-		# binding.pry
 
 		user = @current_user
 		if Group.find(params[:group_id]).name === "Feed"
@@ -31,20 +30,17 @@ class DiscussionsController < ApplicationController
 			# suggestions = JSON.parse(thing)
 			# sources = suggestions["articles"].map {|ar| ar["source"]["name"]}
 			# article_url = suggestions["articles"].sample["url"]
-			# binding.pry
 			# textapi = AylienTextApi::Client.new(app_id: "0d507a71", app_key: "1357374853ea0c2ec00409cd29899ee5")
 			# url = "http://techcrunch.com/2015/04/06/john-oliver-just-changed-the-surveillance-reform-debate"
 
 			# extract = textapi.extract(url: url, best_image: true)
 
-			# binding.pry
 			res = RestClient.get("https://api.cognitive.microsoft.com/bing/v7.0/search?freshness=Day&q=#{interest.query} (#{sites_query})", headers={
 				"Ocp-Apim-Subscription-Key": "b802d49bc8e247acac1a1fe236710554"
 			})
 			articles = JSON.parse(res)["webPages"]["value"]
 			article_names = articles.map {|a| a["name"]}
 			article_url = articles.map {|a| a["url"]}.sample
-			# binding.pry
 		else
 			article_url = params[:articleURL]
 		end
@@ -71,10 +67,8 @@ class DiscussionsController < ApplicationController
 
 		boi = JSON.parse(response.body)
 		json_response = boi[0]["article"]
-		# binding.pry
 
 		if json_response
-			binding.pry
 			@discussion = Discussion.create(
 				name: json_response["headline"], 
 				slug: json_response["headline"].slugify,
@@ -90,12 +84,10 @@ class DiscussionsController < ApplicationController
 				content: json_response["articleBodyHtml"], 
 				discussion: @discussion
 			)
-			# binding.pry
 			if Group.find(params[:group_id]).name == "Feed"
 				guest = User.where.not(id: user.id).sample
 				@discussion.guests << guest
 				# guest.groups.find_by(name: "Guest") << @discussion
-				# binding.pry
 			end
 
 			@discussion.users_and_guests.each do |user|
@@ -116,7 +108,6 @@ class DiscussionsController < ApplicationController
 		# discussion_name = params[:id]
 		# group = @current_user.groups.find_by(name: group_name)
 		@discussion = Discussion.find_by(slug: params[:id])
-		# binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
 			render json: @discussion, current_user_id: user.id		

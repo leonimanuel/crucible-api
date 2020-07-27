@@ -6,8 +6,8 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :facts
 
   def discussions
-    admin_bool = (discussion.admin == object)
     member_discussions = object.discussions.collect do |discussion|
+      admin_bool = (discussion.admin == object)
       { 
         access: "member",
         id: discussion.id, 
@@ -21,7 +21,7 @@ class LoginSerializer < ActiveModel::Serializer
     end
 
     guest_discussions = object.guest_discussions.collect do |discussion|
-      # binding.pry
+      admin_bool = (discussion.admin == object)
       { 
         access: "guest",
         id: discussion.id, 
@@ -36,8 +36,8 @@ class LoginSerializer < ActiveModel::Serializer
   end
 
   def groups
-    admin_bool = (group.admin == object)
     object.groups.collect do |group|
+      admin_bool = (group.admin == object)
       {
         id: group.id,
         name: group.name,

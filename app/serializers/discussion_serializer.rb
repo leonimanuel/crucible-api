@@ -1,5 +1,5 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin
+	attributes :id, :name, :slug, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages

@@ -17,13 +17,11 @@ class GroupSerializer < ActiveModel::Serializer
 
   def members
   	users = object.users.collect do |user|
-  		if user.id != @instance_options[:current_user_id]
-		  	binding.pry
-        {name: user.name, id: user.id}
-  		end
+  		# if user.id != @instance_options[:current_user_id]
+        { id: user.id, name: user.name, group_id: object.id }
+  		# end
   	end
 
-  	binding.pry
     users = users.compact
   end
 end

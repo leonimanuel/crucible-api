@@ -12,10 +12,21 @@ megan = User.create(name: "Megan", email: "megan@aol.com", password: "greenbeans
 ben = User.create(name: "Ben", email: "ben@gmail.com", password: "fishsticks")
 luke = User.create(name: "Luke", email: "luke@yahoo.com", password: "milkmaid")
  
-User.all.map do |user|
-	feed = Group.create(name: "Feed")
+User.all.each do |user|
+	feed = Group.create(name: "Feed", admin: user)
+	guest = Group.create(name: "Guest", admin: user)
 	feed.users << user
+	guest.users << user
+
+	new_facts = Topic.create(name: "New Facts", user: user)
 end
+
+issues = %w(education economy politics business tech)
+issues.each {|issue| Interest.create(section: "issues", title: issue, query: issue)}
+
+current_events = ["black lives matter", "covid", "2020 election"]
+current_events.each {|ce| Interest.create(section: "current events", title: ce, query: ce)}
+
 
 fact1 = Fact.create(content: "pandas are big", url: "pandas.com")
 fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
@@ -25,8 +36,9 @@ fact3 = Fact.create(content: "science is cool", url: "science.com")
 fact4 = Fact.create(content: "science is hard", url: "science.com")
 
 
-new_facts = Topic.create(name: "New Facts", user: billy)
-new_facts_2 = Topic.create(name: "New Facts", user: megan)
+new_facts = Topic.find_by(user: billy)
+new_facts_2 = Topic.find_by(user: megan)
+
 edu = Topic.create(name: "Education", user: megan)
 science = Topic.create(name: "Science", user: billy)
 zoo = Topic.create(name: "Zoology", user: billy, parent: science)
@@ -39,8 +51,8 @@ fifth_amendment = Topic.create(name: "Fith Amendment", user: billy, parent: free
 
 zoo.facts << fact1
 zoo.facts << fact2
-new_facts.facts << fact3
-new_facts.facts << fact4
+science.facts << fact3
+science.facts << fact4
 edu.facts << fact5
 
 fam = Group.create(name: "The Fam")

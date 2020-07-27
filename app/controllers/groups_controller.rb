@@ -7,9 +7,7 @@ class GroupsController < ApplicationController
 
 	def create
 		user = @current_user
-		binding.pry
 		@group = Group.new(name: params[:groupName], admin: user)
-		# binding.pry
 		if @group.valid?
 			@group.save
 			
@@ -23,5 +21,17 @@ class GroupsController < ApplicationController
 
 		render json: @group, current_user_id: user.id	
 		# render json: GroupSerializer.new(group).to_serialized_json
+	end
+
+	def update
+		# binding.pry
+		user = @current_user
+		@group = Group.find(params[:id])
+		@group.update(name: params[:groupName])
+
+		params[:removedMemberIds].each { |memberId| @group.users.delete(User.find(memberId)) }
+		params[:addedMemberIds].each { |memberId| @group.users << User.find(memberId) }
+	
+		render json: @group, current_user_id: user.id	
 	end
 end

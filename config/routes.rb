@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     post "/rephrases" => "rephrases#create"
   end
   resources :users
-  resources :groups, only: [:index, :create] do
+  resources :groups, only: [:index, :create, :update] do
 	  resources :discussions, only: [:create, :show] do
 	  	resources :comments, only: [:create, :index]
       resources :messages, only: [:index, :create]
