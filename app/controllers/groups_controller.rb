@@ -8,7 +8,7 @@ class GroupsController < ApplicationController
 	def create
 		user = @current_user
 		binding.pry
-		@group = Group.new(name: params[:groupName])
+		@group = Group.new(name: params[:groupName], admin: user)
 		# binding.pry
 		if @group.valid?
 			@group.save

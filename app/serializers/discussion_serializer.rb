@@ -1,5 +1,5 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :access, :group_id, :unread_messages_count, :created_at, :article_url
+	attributes :id, :name, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages
@@ -20,6 +20,10 @@ class DiscussionSerializer < ActiveModel::Serializer
 		else
 			"member"
 		end
+	end
+
+	def admin
+		object.admin_id == @instance_options[:current_user_id]
 	end
 
 	def unread_messages_count

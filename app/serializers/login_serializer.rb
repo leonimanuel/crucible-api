@@ -6,7 +6,7 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :facts
 
   def discussions
-    # allDiscussions = object.discussions.push(object.guest_discussions)
+    admin_bool = (discussion.admin == object)
     member_discussions = object.discussions.collect do |discussion|
       { 
         access: "member",
@@ -15,7 +15,8 @@ class LoginSerializer < ActiveModel::Serializer
         slug: discussion.slug,
         group_id: discussion.group_id,
         # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
-        created_at: discussion.created_at
+        created_at: discussion.created_at,
+        admin: admin_bool
       }      
     end
 
@@ -27,17 +28,20 @@ class LoginSerializer < ActiveModel::Serializer
         name: discussion.name,
         group_id: discussion.group_id,
         # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
-        created_at: discussion.created_at
+        created_at: discussion.created_at,
+        admin: admin_bool
       }      
     end
     allDiscussions = member_discussions.concat(guest_discussions)
   end
 
   def groups
+    admin_bool = (group.admin == object)
     object.groups.collect do |group|
       {
         id: group.id,
         name: group.name,
+        admin: admin_bool
       }
     end
   end
