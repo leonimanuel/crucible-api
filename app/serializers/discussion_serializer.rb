@@ -6,6 +6,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 	# has_many :messages
 	belongs_to :group 
 	has_many :guests
+	has_many :members
 	
 	# def unread_messages
 	# 	{
@@ -98,6 +99,23 @@ class DiscussionSerializer < ActiveModel::Serializer
 				id: guest.id,
 				name: guest.name
 			}
+		end
+	end
+
+	def members
+		if object.guests.include?(User.find(@instance_options[:current_user_id]))
+			array = object.users.collect do |user|
+				if user != object.admin
+					{
+						id: user.id,
+						name: user.name,
+						group_id: object.group_id
+					}
+				end
+			end			
+			array.compact
+		else
+			[]
 		end
 	end
 end
