@@ -29,8 +29,19 @@ class GroupsController < ApplicationController
 		@group = Group.find(params[:id])
 		@group.update(name: params[:groupName])
 
-		params[:removedMemberIds].each { |memberId| @group.users.delete(User.find(memberId)) }
-		params[:addedMemberIds].each { |memberId| @group.users << User.find(memberId) }
+		params[:removedMemberIds].each do |memberId| 
+			@group.users.delete(User.find(memberId))
+			
+		end
+		
+		params[:addedMemberIds].each do |memberId| 
+			user = User.find(memberId) 
+			@group.users << user
+			@group.discussions.each do |discussion|
+				DiscussionUnreadMessage.create(user: user, discussion: discussion, unread_messages: 0)
+			end
+	 	end
+
 	
 		render json: @group, current_user_id: user.id	
 	end
