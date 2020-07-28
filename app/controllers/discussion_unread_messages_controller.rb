@@ -11,8 +11,10 @@ class DiscussionUnreadMessagesController < ApplicationController
 		# binding.pry
 		DiscussionUnreadMessage.with_discussion_id(params[:discussion_id]).with_user_id(user.id).first.update(unread_messages: 0)
 
-		serialized_data = {discussion_id: params[:discussion_id], unread_messages: 0}
-		ActionCable.server.broadcast "message_notifications_channel", serialized_data
-		head :ok
+		# serialized_data = {discussion_id: params[:discussion_id], unread_messages: 0, sender_id: user.id}
+		# ActionCable.server.broadcast "message_notifications_channel", serialized_data
+		# head :ok
+
+		render json: {discussion_id: params[:discussion_id], unread_messages: 0, sender_id: user.id}
 	end
 end

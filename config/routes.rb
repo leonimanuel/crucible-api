@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   end
   resources :users
   resources :groups, only: [:index, :create, :update] do
-	  resources :discussions, only: [:create, :show] do
+	  resources :discussions, only: [:create, :show, :update] do
 	  	resources :comments, only: [:create, :index]
       resources :messages, only: [:index, :create]
       patch "/unread-messages-count" => "discussion_unread_messages#update"

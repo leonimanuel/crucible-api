@@ -108,6 +108,7 @@ class DiscussionsController < ApplicationController
 		# discussion_name = params[:id]
 		# group = @current_user.groups.find_by(name: group_name)
 		@discussion = Discussion.find_by(slug: params[:id])
+		# binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
 			render json: @discussion, current_user_id: user.id		
@@ -115,6 +116,26 @@ class DiscussionsController < ApplicationController
 		else
 			render json: {error: "You must be a part of this group to view this discussion"}
 		end
+	end
 
+	def update
+		user = @current_user		
+		@discussion = Discussion.find(params[:id])
+		guestIds = params[:memberIds]
+		guestIds.each do |guestId|
+			user = User.find(guestId)
+			@discussion.guests << user
+			DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
+		end
+
+		render json: @discussion, current_user_id: user.id	
 	end
 end
+
+
+
+
+
+
+
+
