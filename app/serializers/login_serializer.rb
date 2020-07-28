@@ -14,7 +14,7 @@ class LoginSerializer < ActiveModel::Serializer
         name: discussion.name,
         slug: discussion.slug,
         group_id: discussion.group_id,
-        # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
+        unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
         created_at: discussion.created_at,
         admin: admin_bool
       }      
@@ -28,7 +28,7 @@ class LoginSerializer < ActiveModel::Serializer
         name: discussion.name,
         slug: discussion.slug,
         group_id: discussion.group_id,
-        # unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
+        unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
         created_at: discussion.created_at,
         admin: admin_bool
       }      
