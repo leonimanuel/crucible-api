@@ -50,14 +50,20 @@ class LoginSerializer < ActiveModel::Serializer
   end
 
   def group_members
+    # binding.pry
+    all_colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
+    available_colors = all_colors
     member_array = object.groups.collect do |group|
-      colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
       group.users.collect do |user|
+        # binding.pry
         if user === object
           color = "cadetblue"
         else
-          color = colors.sample
-          colors.delete(color)
+          color = available_colors.sample
+          available_colors.delete(color)
+          if available_colors.empty?
+            available_colors = all_colors
+          end
         end
         {
           id: user.id,
@@ -74,7 +80,8 @@ class LoginSerializer < ActiveModel::Serializer
       {
         id: discussion.users.first.id,
         name: discussion.users.first.name, 
-        group_id: discussion.group_id
+        group_id: discussion.group_id,
+        color: available_colors.sample
       }
     end
     return member_array.concat(feed_owner_array).flatten.uniq

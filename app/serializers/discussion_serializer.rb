@@ -95,16 +95,23 @@ class DiscussionSerializer < ActiveModel::Serializer
 
 	def guests
 		object.guests.collect do |guest|
+			if guest == User.find(@instance_options[:current_user_id])
+				binding.pry
+				color = "cadetblue"
+			else
+				color = @@colors.sample
+			end
 			{
 				id: guest.id,
 				name: guest.name,
-				color: @@colors.sample
+				color: color
 			}
 		end
 	end
 
 	def members
-		if object.guests.include?(User.find(@instance_options[:current_user_id]))
+		current_user = User.find(@instance_options[:current_user_id])
+		if object.guests.include?(current_user)
 			array = object.users.collect do |user|
 				if user != object.admin
 					{
