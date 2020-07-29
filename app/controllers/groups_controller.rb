@@ -30,8 +30,12 @@ class GroupsController < ApplicationController
 		@group.update(name: params[:groupName])
 
 		params[:removedMemberIds].each do |memberId| 
-			@group.users.delete(User.find(memberId))
-			
+			user = User.find(memberId)
+			@group.users.delete(user)
+			# binding.pry
+			DiscussionUnreadMessage.destroy(
+				DiscussionUnreadMessage.where(user: user, discussion: @group.discussions).map {|dum| dum.id }
+			)
 		end
 		
 		params[:addedMemberIds].each do |memberId| 

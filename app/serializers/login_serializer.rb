@@ -5,6 +5,8 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :discussions
   has_many :facts
 
+
+  
   def discussions
     member_discussions = object.discussions.collect do |discussion|
       admin_bool = (discussion.admin == object)
@@ -49,11 +51,19 @@ class LoginSerializer < ActiveModel::Serializer
 
   def group_members
     member_array = object.groups.collect do |group|
+      colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
       group.users.collect do |user|
+        if user === object
+          color = "cadetblue"
+        else
+          color = colors.sample
+          colors.delete(color)
+        end
         {
           id: user.id,
           name: user.name,
-          group_id: group.id
+          group_id: group.id,
+          color: color
         }
       end
     end

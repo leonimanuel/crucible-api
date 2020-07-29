@@ -127,7 +127,7 @@ class DiscussionsController < ApplicationController
 			@discussion.guests << user
 			DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
 		end
-
+		# binding.pry
 		render json: @discussion, current_user_id: user.id	
 	end
 end

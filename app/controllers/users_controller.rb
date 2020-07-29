@@ -42,6 +42,13 @@ class UsersController < ApplicationController
 			render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }
 		end
 	end
+
+	def invite
+		# binding.pry
+		user = @current_user
+		# InviteMailer.invite_email(user).deliver_now
+		InviteMailer.invite(user).deliver_now
+	end
 end
 
 

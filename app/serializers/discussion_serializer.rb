@@ -14,7 +14,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 	# 		unread_messages: object.discussion_unread_messages.with_discussion_id(object.id).with_user_id(@instance_options[:current_user_id]).first.unread_messages
 	# 	}
 	# end
-
+	@@colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
 	def access
 		if object.guests.include?(User.find(@instance_options[:current_user_id]))
 			"guest"
@@ -97,7 +97,8 @@ class DiscussionSerializer < ActiveModel::Serializer
 		object.guests.collect do |guest|
 			{
 				id: guest.id,
-				name: guest.name
+				name: guest.name,
+				color: @@colors.sample
 			}
 		end
 	end
@@ -109,7 +110,8 @@ class DiscussionSerializer < ActiveModel::Serializer
 					{
 						id: user.id,
 						name: user.name,
-						group_id: object.group_id
+						group_id: object.group_id,
+						color: @@colors.sample
 					}
 				end
 			end			

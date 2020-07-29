@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   get "/review" => "review#index"
   post "/review" => "review#create"
+  get "/email" => "users#invite"
   # post "users/:email", to: "users#show"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   post "authenticate", to: "authentication#authenticate"
