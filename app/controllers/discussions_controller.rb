@@ -96,13 +96,17 @@ class DiscussionsController < ApplicationController
 				# guest.groups.find_by(name: "Guest") << @discussion
 			end
 
-			@discussion.users_and_guests.each do |user|
-				DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
+			@discussion.users_and_guests.each do |receiver|
+				DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
+				if receiver != user
+					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
+				end
 			end
 
 			# @discussion.guests.each do |guest|
 			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
 			# end			
+			
 
 			render json: @discussion, current_user_id: user.id		
 		end
@@ -123,8 +127,7 @@ class DiscussionsController < ApplicationController
 			if ugud.read == false
 				ugud.update(read: true)	
 			end
-				
-
+			
 			render json: @discussion, current_user_id: user.id		
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
