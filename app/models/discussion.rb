@@ -4,18 +4,18 @@ class Discussion < ApplicationRecord
 
 	belongs_to :group
 	has_many :users, through: :group
-	has_one :article
+	has_one :article, dependent: :destroy
 
-	has_many :comments
-	has_many :messages
+	has_many :comments, dependent: :destroy
+	has_many :messages, dependent: :destroy
 
-	has_many :messages_users_reads
-	has_many :discussion_unread_messages
+	has_many :messages_users_reads, dependent: :destroy
+	has_many :discussion_unread_messages, dependent: :destroy
 
-	has_many :guests_guest_discussions
+	has_many :guests_guest_discussions, dependent: :destroy
 	has_many :guests, through: :guests_guest_discussions, source: :user
 
-	has_many :users_groups_unread_discussions
+	has_many :users_groups_unread_discussions, dependent: :destroy
 
   def users_and_guests
   	users = self.users.map {|user| user}
