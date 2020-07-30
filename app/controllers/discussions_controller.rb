@@ -98,7 +98,7 @@ class DiscussionsController < ApplicationController
 
 			@discussion.users_and_guests.each do |receiver|
 				DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
-				if receiver != user
+				if receiver != user && @discussion.group.name != "Feed"
 					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
 				end
 			end

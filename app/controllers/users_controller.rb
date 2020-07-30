@@ -1,13 +1,14 @@
 class UsersController < ApplicationController
 	skip_before_action :authenticate_request, only: [:create]
 
-	def index
-		if request.headers["searchVal"]
-			search_val = request.headers["searchVal"].capitalize()
+	def search
+		# binding.pry
+		if params["searchVal"]
+			search_val = params["searchVal"].capitalize()
 			users = User.where("name like ?", "%#{search_val}%").all 
 			
 			users = users.select do |user|
-				user.id != @current_user.id
+				user.id != @current_user.id && !params[:memberIds].include?(user.id)
 			end
 			# binding.pry
 			render json: UserSerializer.new(users).to_serialized_json_lite

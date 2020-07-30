@@ -4,7 +4,6 @@ class ApplicationMailer < ActionMailer::Base
 
 
   def new_discussion(creator, receiver, discussion)
-  	binding.pry
   	@creator = creator
   	@receiver = receiver
   	@discussion = discussion
