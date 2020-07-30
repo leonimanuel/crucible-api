@@ -84,9 +84,15 @@ class DiscussionsController < ApplicationController
 				content: json_response["articleBodyHtml"], 
 				discussion: @discussion
 			)
+
+			@discussion.users.each do |member|
+				UsersGroupsUnreadDiscussion.create(user: member, group: @discussion.group, discussion: @discussion)				
+			end
+
 			if Group.find(params[:group_id]).name == "Feed"
 				guest = User.where.not(id: user.id).sample
 				@discussion.guests << guest
+				UsersGroupsUnreadDiscussion.create(user: guest, group: guest.groups.find_by(name: "Guest"), discussion: @discussion)
 				# guest.groups.find_by(name: "Guest") << @discussion
 			end
 
@@ -105,9 +111,10 @@ class DiscussionsController < ApplicationController
 	def show
 		user = @current_user
 		group_name = params[:group_id].split("-").join(" ")
+		group = Group.find_by(name: group_name)
 		# discussion_name = params[:id]
 		# group = @current_user.groups.find_by(name: group_name)
-		@discussion = Discussion.find_by(slug: params[:id])
+		@discussion =  group.discussions.find_by(slug: params[:id])
 		# binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
