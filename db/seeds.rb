@@ -55,8 +55,8 @@ science.facts << fact3
 science.facts << fact4
 edu.facts << fact5
 
-fam = Group.create(name: "The Fam")
-econ = Group.create(name: "Econ 100")
+fam = Group.create(name: "The Fam", admin: billy)
+# econ = Group.create(name: "Econ 100")
 fam.users.push(billy, megan, ashley)
 
 

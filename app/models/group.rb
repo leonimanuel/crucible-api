@@ -4,4 +4,6 @@ class Group < ApplicationRecord
 	has_many :discussions
 
 	belongs_to :admin, foreign_key: "admin_id", class_name: "User"
+
+	has_many :users_groups_unread_discussions
 end

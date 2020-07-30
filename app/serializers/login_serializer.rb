@@ -18,12 +18,14 @@ class LoginSerializer < ActiveModel::Serializer
         group_id: discussion.group_id,
         unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
         created_at: discussion.created_at,
+        read: UsersGroupsUnreadDiscussion.find_by(user: object, discussion: discussion).read,
         admin: admin_bool
       }      
     end
 
     guest_discussions = object.guest_discussions.collect do |discussion|
       admin_bool = (discussion.admin == object)
+      # UsersGroupsUnreadDiscussion.where(user: object, discussion: discussion).first
       { 
         access: "guest",
         id: discussion.id, 
@@ -32,6 +34,7 @@ class LoginSerializer < ActiveModel::Serializer
         group_id: discussion.group_id,
         unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
         created_at: discussion.created_at,
+        read: UsersGroupsUnreadDiscussion.find_by(user: object, discussion: discussion).read,
         admin: admin_bool
       }      
     end

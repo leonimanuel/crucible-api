@@ -28,4 +28,6 @@ class User < ApplicationRecord
 
 	has_many :users_interests
 	has_many :interests, through: :users_interests
+
+	has_many :users_groups_unread_discussions
 end

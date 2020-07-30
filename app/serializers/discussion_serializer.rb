@@ -1,5 +1,5 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :slug, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin
+	attributes :id, :name, :slug, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin, :read
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages
@@ -21,6 +21,10 @@ class DiscussionSerializer < ActiveModel::Serializer
 		else
 			"member"
 		end
+	end
+
+	def read
+		UsersGroupsUnreadDiscussion.find_by(user: @instance_options[:current_user_id], discussion: object).read
 	end
 
 	def admin
@@ -62,7 +66,6 @@ class DiscussionSerializer < ActiveModel::Serializer
 				selection_comment_upvotes: comment.selection_comment_upvotes,
 				selection_comment_downvotes: comment.selection_comment_downvotes,
 				review_status: comment.review_status,
-				
 				facts_comments_reviews: FactsComment.where(comment: comment).collect do |fact_comment|
 					{	
 						comment_fact_upvotes: fact_comment.comment_fact_upvotes,
@@ -96,7 +99,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 	def guests
 		object.guests.collect do |guest|
 			if guest == User.find(@instance_options[:current_user_id])
-				binding.pry
+				# binding.pry
 				color = "cadetblue"
 			else
 				color = @@colors.sample

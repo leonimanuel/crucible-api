@@ -15,6 +15,8 @@ class Discussion < ApplicationRecord
 	has_many :guests_guest_discussions
 	has_many :guests, through: :guests_guest_discussions, source: :user
 
+	has_many :users_groups_unread_discussions
+
   def users_and_guests
   	users = self.users.map {|user| user}
   	guests = self.guests.map {|guest| guest}

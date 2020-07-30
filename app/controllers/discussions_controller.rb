@@ -118,6 +118,13 @@ class DiscussionsController < ApplicationController
 		# binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			# render json: @discussion, serializer(DiscussionSerializer)
+			ugud = UsersGroupsUnreadDiscussion.find_by(user: user, discussion: @discussion)
+			# binding.pry
+			if ugud.read == false
+				ugud.update(read: true)	
+			end
+				
+
 			render json: @discussion, current_user_id: user.id		
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
@@ -133,6 +140,7 @@ class DiscussionsController < ApplicationController
 			user = User.find(guestId)
 			@discussion.guests << user
 			DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
+			UsersGroupsUnreadDiscussion.create(user: user, group: user.groups.find_by(name: "Guest"), discussion: @discussion)			
 		end
 		# binding.pry
 		render json: @discussion, current_user_id: user.id
