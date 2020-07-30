@@ -1,4 +1,4 @@
-require 'aylien_text_api'
+require 'aylien_news_api'
 require "curb"
 
 require 'net/http'
@@ -7,12 +7,42 @@ require 'json'
 require "rest-client"
 
 class DiscussionsController < ApplicationController
+	# def createBOI
+	# 	AylienNewsApi.configure do |config|
+	# 	  # Configure API key authorization: app_id
+	# 	  config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = 'APP_ID'
+
+	# 	  # Configure API key authorization: app_key
+	# 	  config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = 'APP_KEY'
+	# 	end
+
+	# 	api_instance = AylienNewsApi::DefaultApi.new
+	# 	opts = {
+	#     'title': '"Portland" AND "Protests"',
+	#     'body': 'fraud',
+	#     'language': ['en'],
+	#     'published_at_start': 'NOW-7DAYS',
+	#     'published_at_end': 'NOW',
+	#     # "source_domain": ["economist.com"],
+	#     'per_page': 1,
+	#     'sort_by': 'relevance'
+	# 	}
+
+	# 	begin
+	# 	  #List Clusters
+	# 	  result = api_instance.list_stories(opts)
+	# 	  p result
+	# 	  binding.pry
+	# 	rescue AylienNewsApi::ApiError => e
+	# 	  puts "Exception when calling DefaultApi->list_clusters: #{e}"
+	# 	end
+	# end
+
 	def create
 		#GNEWS
 		# uri = URI('https://gnews.io/api/v3/search?q=uighur detention camps?&token=a3cbbbace66491b895eb064379755ca7')
 		# thing = Net::HTTP.get(uri) # => String
 		# suggestions = JSON.parse(thing)
-
 		user = @current_user
 		if Group.find(params[:group_id]).name === "Feed"
 			if user.interests.empty?
@@ -24,6 +54,7 @@ class DiscussionsController < ApplicationController
 			all_sites = %w(nytimes.com wsj.com washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
 			sites = %w(washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
 			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
+		# binding.pry
 
 			# uri = URI("https://gnews.io/api/v3/search?q=#{interest.query}&max=100&token=a3cbbbace66491b895eb064379755ca7")
 			# thing = Net::HTTP.get(uri) # => String
@@ -44,6 +75,7 @@ class DiscussionsController < ApplicationController
 		else
 			article_url = params[:articleURL]
 		end
+		# binding.pry
 
 		uri = URI.parse("https://autoextract.scrapinghub.com/v1/extract")
 		request = Net::HTTP::Post.new(uri)
@@ -64,7 +96,6 @@ class DiscussionsController < ApplicationController
 		response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
 		  http.request(request)
 		end
-
 		boi = JSON.parse(response.body)
 		json_response = boi[0]["article"]
 

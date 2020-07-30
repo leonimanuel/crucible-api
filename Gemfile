@@ -20,7 +20,7 @@ gem "jwt"
 gem "simple_command"
 
 gem "faraday"
-gem 'aylien_text_api'
+gem 'aylien_news_api'
 gem "curb"
 gem "rest-client"
 gem "dotenv-rails"
