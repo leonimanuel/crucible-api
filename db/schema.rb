@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_015353) do
+ActiveRecord::Schema.define(version: 2020_08_01_182839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 2020_07_30_015353) do
     t.string "author"
     t.string "date_published"
     t.index ["discussion_id"], name: "index_articles_on_discussion_id"
+  end
+
+  create_table "briefings", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "organization"
   end
 
   create_table "comments", force: :cascade do |t|
