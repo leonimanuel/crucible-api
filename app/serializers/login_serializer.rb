@@ -4,6 +4,7 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :group_members
   has_many :discussions
   has_many :facts
+  has_many :briefings
 
 
   
@@ -130,6 +131,18 @@ class LoginSerializer < ActiveModel::Serializer
       mean = numerator.to_f / denominator.to_f 
       # binding.pry
       mean      
+    end
+  end
+
+  def briefings
+    Briefing.all.collect do |briefing|
+      {
+        id: briefing.id,
+        name: briefing.name,
+        url: briefing.url,
+        description: briefing.description,
+        organization: briefing.organization
+      }
     end
   end
 end
