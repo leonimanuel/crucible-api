@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_01_182839) do
+ActiveRecord::Schema.define(version: 2020_08_01_221119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,15 @@ ActiveRecord::Schema.define(version: 2020_08_01_182839) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "interests_briefings", force: :cascade do |t|
+    t.bigint "interest_id", null: false
+    t.bigint "briefing_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["briefing_id"], name: "index_interests_briefings_on_briefing_id"
+    t.index ["interest_id"], name: "index_interests_briefings_on_interest_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "text"
     t.bigint "discussion_id", null: false
@@ -207,6 +216,8 @@ ActiveRecord::Schema.define(version: 2020_08_01_182839) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "daily_reviews", default: 0
+    t.integer "daily_streaks", default: 0
   end
 
   create_table "users_groups", force: :cascade do |t|
@@ -260,6 +271,8 @@ ActiveRecord::Schema.define(version: 2020_08_01_182839) do
   add_foreign_key "facts_reviews", "users"
   add_foreign_key "guests_guest_discussions", "discussions"
   add_foreign_key "guests_guest_discussions", "users"
+  add_foreign_key "interests_briefings", "briefings"
+  add_foreign_key "interests_briefings", "interests"
   add_foreign_key "messages", "discussions"
   add_foreign_key "messages", "users"
   add_foreign_key "messages_users_reads", "messages"

@@ -1,5 +1,5 @@
 class LoginSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :review_score, :reputability_score
+  attributes :id, :name, :email, :review_score, :reputability_score, :daily_reviews
   has_many :groups
   has_many :group_members
   has_many :discussions

@@ -10,6 +10,12 @@ class ReviewController < ApplicationController
 		user = @current_user
 		item = params[:itemType].constantize.find(params[:itemId])
 		# binding.pry
+		user.increment!("daily_reviews", by = 1)
+		if user.daily_reviews == 10
+			user.increment!("daily_streaks", by = 1)
+		end
+
+
 		if params[:decision] == "valid"
 			item["#{params[:reviewType]}_upvotes"] += 1
 		elsif params[:decision] == "invalid"
@@ -17,6 +23,7 @@ class ReviewController < ApplicationController
 		end
 		item.save
 		# binding.pry
+
 		keys = item.attributes.map do |key, value| 
 			key if key.include?("votes")
 		end
