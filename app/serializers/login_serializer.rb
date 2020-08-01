@@ -16,6 +16,7 @@ class LoginSerializer < ActiveModel::Serializer
         name: discussion.name,
         slug: discussion.slug,
         group_id: discussion.group_id,
+        group_name: Group.find(discussion.group_id).name,
         unread_messages_count: discussion.discussion_unread_messages.with_discussion_id(discussion.id).with_user_id(object.id).first.unread_messages,
         created_at: discussion.created_at,
         read: UsersGroupsUnreadDiscussion.find_by(user: object, discussion: discussion).read,
