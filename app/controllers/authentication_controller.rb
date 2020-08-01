@@ -3,7 +3,7 @@ class AuthenticationController < ApplicationController
 
  def authenticate
    command = AuthenticateUser.call(params[:email], params[:password])
-
+   # binding.pry
    if command.success?
      user = User.find_by(email: params[:email])
      render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }

@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 		# render json: [{bok: "choy"}, JSON.parse(UserSerializer.new(user).to_serialized_json)]
 		# binding.pry
 		@facts = Fact.pending_review.all
+		# binding.pry
 		# render json: { login: LoginSerializer.new(user).to_json, review: ReviewSerializer.new(facts).to_json }
 		render json: {
 			user: ActiveModel::SerializableResource.new(@user, each_serializer: LoginSerializer),

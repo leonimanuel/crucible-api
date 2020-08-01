@@ -7,36 +7,37 @@ require 'json'
 require "rest-client"
 
 class DiscussionsController < ApplicationController
-	# def createBOI
-	# 	AylienNewsApi.configure do |config|
-	# 	  # Configure API key authorization: app_id
-	# 	  config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = 'APP_ID'
+	def createBOI
+		AylienNewsApi.configure do |config|
+		  # Configure API key authorization: app_id
+		  config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = '0d507a71'
 
-	# 	  # Configure API key authorization: app_key
-	# 	  config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = 'APP_KEY'
-	# 	end
+		  # Configure API key authorization: app_key
+		  config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = '1357374853ea0c2ec00409cd29899ee5'
+		end
 
-	# 	api_instance = AylienNewsApi::DefaultApi.new
-	# 	opts = {
-	#     'title': '"Portland" AND "Protests"',
-	#     'body': 'fraud',
-	#     'language': ['en'],
-	#     'published_at_start': 'NOW-7DAYS',
-	#     'published_at_end': 'NOW',
-	#     # "source_domain": ["economist.com"],
-	#     'per_page': 1,
-	#     'sort_by': 'relevance'
-	# 	}
+		api_instance = AylienNewsApi::DefaultApi.new
+		opts = {
+	    # 'title': '"covid"',
+	    # 'body': 'election',
+	    'language': ['en'],
+	    'published_at_start': 'NOW-7DAYS',
+	    'published_at_end': 'NOW',
+	    # "links_permalink": "http://www.washingtonpost.com/politics/trump-floats-idea-of-delaying-the-november-election-as-he-ramps-up-attacks-on-voting-by-mail/2020/07/30/15fe7ac6-d264-11ea-9038-af089b63ac21_story.html",
+	    "source_domain": %w(csis.org brookings.edu rand.org),
+	    'per_page': 5,
+	    'sort_by': 'hotness'
+		}
 
-	# 	begin
-	# 	  #List Clusters
-	# 	  result = api_instance.list_stories(opts)
-	# 	  p result
-	# 	  binding.pry
-	# 	rescue AylienNewsApi::ApiError => e
-	# 	  puts "Exception when calling DefaultApi->list_clusters: #{e}"
-	# 	end
-	# end
+		begin
+		  #List Clusters
+		  result = api_instance.list_stories(opts)
+		  p result
+		  binding.pry
+		rescue AylienNewsApi::ApiError => e
+		  puts "Exception when calling DefaultApi->list_clusters: #{e}"
+		end
+	end
 
 	def create
 		#GNEWS
@@ -52,9 +53,9 @@ class DiscussionsController < ApplicationController
 			end
 
 			all_sites = %w(nytimes.com wsj.com washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
-			sites = %w(washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
+			sites = %w(nytimes.com wsj.com bbc.com economist.com newyorker.com cfr.org theatlantic.com usatoday.com slate.com salon.com cnn.com foxnews.com theintercept.com bloomberg.com thedailybeast.com)
+			sites = %w(brookings.edu) # brookings.edu csis.org rand.org
 			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
-		# binding.pry
 
 			# uri = URI("https://gnews.io/api/v3/search?q=#{interest.query}&max=100&token=a3cbbbace66491b895eb064379755ca7")
 			# thing = Net::HTTP.get(uri) # => String
@@ -72,6 +73,8 @@ class DiscussionsController < ApplicationController
 			articles = JSON.parse(res)["webPages"]["value"]
 			article_names = articles.map {|a| a["name"]}
 			article_url = articles.map {|a| a["url"]}.sample
+			# puts article_url
+			binding.pry
 		else
 			article_url = params[:articleURL]
 		end
@@ -130,7 +133,7 @@ class DiscussionsController < ApplicationController
 			@discussion.users_and_guests.each do |receiver|
 				DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
 				if receiver != user && @discussion.group.name != "Feed"
-					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
+					# ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
 				end
 			end
 

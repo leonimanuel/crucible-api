@@ -9,7 +9,7 @@ class ReviewSerializer < ActiveModel::Serializer
 
 	def facts
 		# binding.pry
-		facts = object.collect do |fact|
+		facts = Fact.pending_review.all.collect do |fact|
 			if fact.fact_rephrase && fact.fact_rephrase.review_status === "pending"
 				# binding.pry
 				{
