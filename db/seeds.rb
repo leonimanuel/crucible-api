@@ -60,6 +60,13 @@ fam = Group.create(name: "The Fam", admin: billy)
 fam.users.push(billy, megan, ashley)
 
 
+briefing = Briefing.create(
+	name: "Americans Who Mainly Get Their News on Social Media Are Less Engaged, Less Knowledgeable", 
+	description: "Those who rely on social media for news are less likely to get the facts right about the coronavirus and politics and more likely to hear some unproven claims", 
+	url: "https://www.journalism.org/2020/07/30/americans-who-mainly-get-their-news-on-social-media-are-less-engaged-less-knowledgeable/",
+	organization: "Pew Research Center"
+)
+
 # new_drug = Discussion.create(name: "This New Drug is Lit", group: fam)
 
 
