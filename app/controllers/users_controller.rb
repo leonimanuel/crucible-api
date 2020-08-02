@@ -25,6 +25,9 @@ class UsersController < ApplicationController
 	def show
 		# binding.pry
 		@user = @current_user
+		if params[:id] === "extension"
+			return render json: {id: @user.id, name: @user.name, email: @user.email}
+		end
 		# user = @current_user # || User.find(1)
 		# render json: [{bok: "choy"}, JSON.parse(UserSerializer.new(user).to_serialized_json)]
 		# binding.pry

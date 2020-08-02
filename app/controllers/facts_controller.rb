@@ -40,4 +40,19 @@ class FactsController < ApplicationController
 			end			
 		end
 	end
+
+	def add_from_extension
+		user = @current_user
+		# render json: {status: "success"}
+		fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")
+		if fact.save
+			if params[:rephrase] != ""
+				FactRephrase.create(content: params[:rephrase], fact: fact, user: user)
+			end
+			# binding.pry
+			topic = user.topics.find_by(name: "New Facts")
+			topic.facts << fact
+			render json: {status: "success"}
+		end
+	end
 end

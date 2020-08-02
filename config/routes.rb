@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   resources :topics
-  resources :facts do
-    post "/rephrases" => "rephrases#create"
-  end
+  resources :facts #do
+  post "/add-from-extension" => "facts#add_from_extension"
+    # post "/rephrases" => "rephrases#create"
+  # end
   resources :users
   post "/user-search" => "users#search"
 
