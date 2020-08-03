@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 			users = User.where("name like ?", "%#{search_val}%").all 
 			
 			users = users.select do |user|
-				user.id != @current_user.id && !params[:memberIds].include?(user.id)
+				user.id != @current_user.id && !params[:memberIds].include?(user.id) && !params[:addedUserIds].include?(user.id)
 			end
 			# binding.pry
 			render json: UserSerializer.new(users).to_serialized_json_lite

@@ -15,6 +15,14 @@ class DiscussionUnreadMessagesController < ApplicationController
 		# ActionCable.server.broadcast "message_notifications_channel", serialized_data
 		# head :ok
 
-		render json: {discussion_id: params[:discussion_id], unread_messages: 0, sender_id: user.id}
+    serialized_data = {
+    	discussion_id: params[:discussion_id], 
+    	total_unreads: MessagesUsersRead.where(user: user, read: false).count,
+    	user_id: user.id
+    }
+    ReadDiscussionChannel.broadcast_to user, serialized_data
+    head :ok
+
+		# render json: {discussion_id: params[:discussion_id], unread_messages: 0, sender_id: user.id}
 	end
 end
