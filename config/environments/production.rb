@@ -1,7 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.web_socket_server_url = "wss://crucible-api.herokuapp.com/cable"
-  config.action_cable.allowed_request_origins = ['https://crucible-api.herokuapp.com', 'http://crucible-api.herokuapp.com', "https://crucible-frontend.web.app", "http://localhost:3001"]
+  config.action_cable.allowed_request_origins = ['https://crucible-api.herokuapp.com', 'http://crucible-api.herokuapp.com', "https://crucible-frontend.web.app", "http://localhost:3001", "chrome-extension://hkcjaaabmkdnghnfbnlfjicjdnegpfde"]
   # Code is not reloaded between requests.
   config.cache_classes = true
 
