@@ -6,7 +6,13 @@ class AuthenticationController < ApplicationController
    # binding.pry
    if command.success?
      user = User.find_by(email: params[:email])
-     render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }
+     render json: { 
+     	auth_token: command.result, 
+     	user: {id: user.id, 
+     		name: user.name, 
+     		email: user.email}, 
+     		unread_messages_count: MessagesUsersRead.where(user: user, read: false).count
+   		}
      # render json: [{ auth_token: command.result }, JSON.parse(UserSerializer.new(user).to_serialized_json)]
    else
      render json: { error: command.errors }, status: :unauthorized

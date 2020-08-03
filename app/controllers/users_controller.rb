@@ -26,7 +26,12 @@ class UsersController < ApplicationController
 		# binding.pry
 		@user = @current_user
 		if params[:id] === "extension"
-			return render json: {id: @user.id, name: @user.name, email: @user.email}
+			return render json: {
+				id: @user.id, 
+				name: @user.name, 
+				email: @user.email, 
+				unread_messages_count: MessagesUsersRead.where(user: @user, read: false).count
+			}
 		end
 		# user = @current_user # || User.find(1)
 		# render json: [{bok: "choy"}, JSON.parse(UserSerializer.new(user).to_serialized_json)]
