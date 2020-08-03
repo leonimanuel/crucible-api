@@ -1,5 +1,6 @@
 class DiscussionUnreadMessagesController < ApplicationController
 	def update
+		# binding.pry
 		user = @current_user
 		# binding.pry
 
@@ -18,6 +19,7 @@ class DiscussionUnreadMessagesController < ApplicationController
     serialized_data = {
     	discussion_id: params[:discussion_id], 
     	total_unreads: MessagesUsersRead.where(user: user, read: false).count,
+    	unread_messages: 0,
     	user_id: user.id
     }
     ReadDiscussionChannel.broadcast_to user, serialized_data
