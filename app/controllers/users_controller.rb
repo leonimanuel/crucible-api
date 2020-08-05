@@ -26,11 +26,14 @@ class UsersController < ApplicationController
 		# binding.pry
 		@user = @current_user
 		if params[:id] === "extension"
+			group_names = @user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
+
 			return render json: {
 				id: @user.id, 
 				name: @user.name, 
 				email: @user.email, 
-				unread_messages_count: MessagesUsersRead.where(user: @user, read: false).count
+				unread_messages_count: MessagesUsersRead.where(user: @user, read: false).count,
+				group_names: group_names
 			}
 		end
 		# user = @current_user # || User.find(1)
