@@ -2,7 +2,6 @@ class FactsController < ApplicationController
 	@@foribidden_domains = []
 
 	def create
-		# binding.pry
 		user = @current_user
 
 		if params[:origin_topic_name] && params[:destination_topic_name]
@@ -30,7 +29,6 @@ class FactsController < ApplicationController
 		else
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")
 			if @fact.valid?
-				# binding.pry
 				@fact.save
 				
 				topic = user.topics.find_by(name: "New Facts")
@@ -45,14 +43,12 @@ class FactsController < ApplicationController
 
 	def add_from_extension
 		user = @current_user
-		binding.pry
 		# render json: {status: "success"}
 		fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")
 		if fact.save
 			if params[:rephrase] != ""
 				FactRephrase.create(content: params[:rephrase], fact: fact, user: user)
 			end
-			# binding.pry
 			topic = user.topics.find_by(name: "New Facts")
 			topic.facts << fact
 			render json: {status: "success"}
