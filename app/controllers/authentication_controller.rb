@@ -5,9 +5,9 @@ class AuthenticationController < ApplicationController
 	  command = AuthenticateUser.call(params[:email], params[:password])
 	  # binding.pry
   	if command.success?
-			group_names = @user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
-			
 			user = User.find_by(email: params[:email])
+			group_names = user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
+			
 			render json: { 
 				auth_token: command.result, 
 				user: {
