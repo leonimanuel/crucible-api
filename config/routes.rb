@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resources :topics
   resources :facts #do
   post "/add-from-extension" => "facts#add_from_extension"
+  # post "/groups/:groupName/discussions-ext" => "discussions#create_from_extension"
+
     # post "/rephrases" => "rephrases#create"
   # end
   resources :users

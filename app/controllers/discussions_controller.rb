@@ -32,8 +32,6 @@ class DiscussionsController < ApplicationController
 		begin
 		  #List Clusters
 		  result = api_instance.list_stories(opts)
-		  p result
-		  binding.pry
 		rescue AylienNewsApi::ApiError => e
 		  puts "Exception when calling DefaultApi->list_clusters: #{e}"
 		end
@@ -45,7 +43,14 @@ class DiscussionsController < ApplicationController
 		# thing = Net::HTTP.get(uri) # => String
 		# suggestions = JSON.parse(thing)
 		user = @current_user
-		if Group.find(params[:group_id]).name === "Feed"
+		
+		if params[:extension]
+			group = user.groups.find_by(name: params[:group_id])
+		else
+			group = Group.find(params[:group_id])
+		end
+
+		if group.name === "Feed"
 			if user.interests.empty?
 				return render json: { error: "please select at least one interest for article recommendations" }, status: :failed_dependency
 			else
@@ -74,7 +79,6 @@ class DiscussionsController < ApplicationController
 			article_names = articles.map {|a| a["name"]}
 			article_url = articles.map {|a| a["url"]}.sample
 			# puts article_url
-			binding.pry
 		else
 			article_url = params[:articleURL]
 		end
@@ -106,7 +110,7 @@ class DiscussionsController < ApplicationController
 			@discussion = Discussion.create(
 				name: json_response["headline"], 
 				slug: json_response["headline"].slugify,
-				group: Group.find(params[:group_id]), 
+				group: group, 
 				article_url: article_url,
 				admin: user
 			)
@@ -123,7 +127,7 @@ class DiscussionsController < ApplicationController
 				UsersGroupsUnreadDiscussion.create(user: member, group: @discussion.group, discussion: @discussion)				
 			end
 
-			if Group.find(params[:group_id]).name == "Feed"
+			if group.name == "Feed"
 				guest = User.where.not(id: user.id).sample
 				@discussion.guests << guest
 				UsersGroupsUnreadDiscussion.create(user: guest, group: guest.groups.find_by(name: "Guest"), discussion: @discussion)
@@ -140,7 +144,9 @@ class DiscussionsController < ApplicationController
 			# @discussion.guests.each do |guest|
 			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
 			# end			
-			
+			if params[:extension]
+				return render json: {slug: @discussion.slug}
+			end			
 
 			render json: @discussion, current_user_id: user.id		
 		end
@@ -162,7 +168,7 @@ class DiscussionsController < ApplicationController
 				ugud.update(read: true)	
 			end
 			
-			render json: @discussion, current_user_id: user.id		
+			render json: @discussion, current_user_id: user.id				
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
 			render json: {error: "You must be a part of this group to view this discussion"}
