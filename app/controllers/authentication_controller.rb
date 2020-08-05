@@ -5,6 +5,8 @@ class AuthenticationController < ApplicationController
 	  command = AuthenticateUser.call(params[:email], params[:password])
 	  # binding.pry
   	if command.success?
+			group_names = @user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
+			
 			user = User.find_by(email: params[:email])
 			render json: { 
 				auth_token: command.result, 
@@ -12,7 +14,8 @@ class AuthenticationController < ApplicationController
 					id: user.id, 
 					name: user.name, 
 					email: user.email,
-					unread_messages_count: MessagesUsersRead.where(user: user, read: false).count
+					unread_messages_count: MessagesUsersRead.where(user: user, read: false).count,
+					group_names: group_names
 				} 
 			}
 	   # render json: [{ auth_token: command.result }, JSON.parse(UserSerializer.new(user).to_serialized_json)]
