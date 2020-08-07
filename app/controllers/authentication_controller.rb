@@ -6,7 +6,7 @@ class AuthenticationController < ApplicationController
 	  # binding.pry
   	if command.success?
 			user = User.find_by(email: params[:email])
-			group_names = user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
+			group_names = user.groups.map {|g| g.name unless g.name == "Guest"}.compact
 			
 			render json: { 
 				auth_token: command.result, 
