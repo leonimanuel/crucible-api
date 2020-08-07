@@ -6,18 +6,6 @@ class MessagesController < ApplicationController
     discussion = Discussion.find(params[:discussion_id])    
     message = Message.new(text: params[:text], discussion: discussion, user: user)
 
-    # serialized_data = {success: "yes"}
-    # # discussion.users_and_guests do |user|
-    #   MessagesChannel.broadcast_to 1, serialized_data
-    #   head :ok
-    # # end
-    
-    # serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1, sender_id: user.id }
-    # discussion.users_and_guests.each do |user|
-    #   MessagesChannel.broadcast_to user, serialized_notification_data
-    #   head :ok
-    # end
-
     if message.save
       recipients = message.discussion.users_and_guests.select do |user|
         user.id != message.user_id
