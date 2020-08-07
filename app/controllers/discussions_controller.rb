@@ -145,10 +145,10 @@ class DiscussionsController < ApplicationController
 			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
 			# end			
 			if params[:extension]
-				return render json: {slug: @discussion.slug}
+				render json: {slug: @discussion.slug}
+			else
+				render json: @discussion, current_user_id: user.id		
 			end			
-
-			render json: @discussion, current_user_id: user.id		
 		end
 	end
 
