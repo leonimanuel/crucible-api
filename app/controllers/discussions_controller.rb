@@ -82,7 +82,6 @@ class DiscussionsController < ApplicationController
 		else
 			article_url = params[:articleURL]
 		end
-		# binding.pry
 
 		uri = URI.parse("https://autoextract.scrapinghub.com/v1/extract")
 		request = Net::HTTP::Post.new(uri)
@@ -154,16 +153,11 @@ class DiscussionsController < ApplicationController
 
 	def show
 		user = @current_user
-		group_name = params[:group_id].split("-").join(" ")
-		group = Group.find_by(name: group_name)
-		# discussion_name = params[:id]
-		# group = @current_user.groups.find_by(name: group_name)
-		@discussion =  group.discussions.find_by(slug: params[:id])
-		# binding.pry
+		discussion_id = params[:id].split("-").last.to_i
+
+		@discussion =  Discussion.find(discussion_id)
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
-			# render json: @discussion, serializer(DiscussionSerializer)
 			ugud = UsersGroupsUnreadDiscussion.find_by(user: user, discussion: @discussion)
-			# binding.pry
 			if ugud.read == false
 				ugud.update(read: true)	
 			end
@@ -185,7 +179,7 @@ class DiscussionsController < ApplicationController
 			DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
 			UsersGroupsUnreadDiscussion.create(user: user, group: user.groups.find_by(name: "Guest"), discussion: @discussion)			
 		end
-		# binding.pry
+
 		render json: @discussion, current_user_id: user.id
 	end
 end
