@@ -57,7 +57,13 @@ class UsersController < ApplicationController
 			user.topics << Topic.create(name: "New Facts", user: user)
 			
 			command = AuthenticateUser.call(user.email, user.password)
-			render json: { auth_token: command.result, user: {id: user.id, name: user.name, email: user.email} }
+			render json: { auth_token: command.result, user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
+		else
+			if !user.errors.details[:email].empty?
+				render json: {error: "An account with this email already exists"}
+			elsif !user.errors.details[:handle].empty?
+				render json: {error: "handle already taken, please choose another"}				
+			end
 		end
 	end
 

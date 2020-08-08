@@ -1,10 +1,9 @@
 class User < ApplicationRecord
+	validates :email, :uniqueness => {:case_sensitive => false}
+	validates :handle, :uniqueness => {:case_sensitive => false}
+
 	has_secure_password
 
-	# has_many :facts_users
-	# has_many :facts, through: :facts_users
-	# has_many :fact_rephrases
-	
 	has_many :topics
 	has_many :facts, through: :topics
 
