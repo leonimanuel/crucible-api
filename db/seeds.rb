@@ -5,12 +5,12 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-billy = User.create(name: "Billy", email: "billy@aol.com", password: "greenbeans")
-claire = User.create(name: "Claire", email: "claire@gmail.com", password: "fishsticks")
-ashley = User.create(name: "Ashley", email: "ashley@yahoo.com", password: "milkmaid")
-megan = User.create(name: "Megan", email: "megan@aol.com", password: "greenbeans")
-ben = User.create(name: "Ben", email: "ben@gmail.com", password: "fishsticks")
-luke = User.create(name: "Luke", email: "luke@yahoo.com", password: "milkmaid")
+billy = User.create(name: "Billy", last_name: "Buxington", handle: "billybux", email: "billy@aol.com", password: "greenbeans")
+claire = User.create(name: "Claire", last_name: "Strickland", handle: "clairesus", email: "claire@gmail.com", password: "fishsticks")
+ashley = User.create(name: "Ashley", last_name: "Tisdale", handle: "tisreal", email: "ashley@yahoo.com", password: "milkmaid")
+megan = User.create(name: "Megan", last_name: "Fox", handle: "transformher", email: "megan@aol.com", password: "greenbeans")
+ben = User.create(name: "Ben", last_name: "Shwartzman", handle: "bentobox", email: "ben@gmail.com", password: "fishsticks")
+luke = User.create(name: "Luke", last_name: "Dukerman", handle: "lukeduke", email: "luke@yahoo.com", password: "milkmaid")
  
 User.all.each do |user|
 	feed = Group.create(name: "Feed", admin: user)
