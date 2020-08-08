@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_08_055011) do
+ActiveRecord::Schema.define(version: 2020_08_08_164802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,7 +82,6 @@ ActiveRecord::Schema.define(version: 2020_08_08_055011) do
     t.string "review_status", default: "pending"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "user_id"
     t.float "grade"
     t.index ["fact_id"], name: "index_fact_rephrases_on_fact_id"
   end
@@ -100,6 +99,7 @@ ActiveRecord::Schema.define(version: 2020_08_08_055011) do
     t.integer "credibility_upvotes", default: 0
     t.integer "credibility_downvotes", default: 0
     t.float "grade"
+    t.integer "collector_id"
   end
 
   create_table "facts_comments", force: :cascade do |t|

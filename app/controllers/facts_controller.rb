@@ -27,7 +27,7 @@ class FactsController < ApplicationController
 				render json: @fact, topic_id: topic.id				
 			end
 		else
-			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending")
+			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
 			if @fact.valid?
 				@fact.save
 				
