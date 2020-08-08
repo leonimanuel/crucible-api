@@ -1,9 +1,9 @@
 class ReviewSerializer < ActiveModel::Serializer
 	# attributes :id, :content, :url
 
-	# has_many :facts
-	# has_many :comments
-	# has_many :facts_comments
+	has_many :facts
+	has_many :comments
+	has_many :facts_comments
 	has_many :fact_rephrases
 
 	def facts
