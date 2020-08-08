@@ -51,7 +51,7 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		user = User.new(name: params[:name], email: params[:email], password: params[:password])
+		user = User.new(name: params[:name], last_name: params[:lastName], handle: params[:handle], email: params[:email], password: params[:password])
 		if user.valid? && !User.find_by(email: params[:email])
 			user.save
 			user.topics << Topic.create(name: "New Facts", user: user)
