@@ -8,12 +8,6 @@ class DiscussionSerializer < ActiveModel::Serializer
 	has_many :guests
 	has_many :members
 	
-	# def unread_messages
-	# 	{
-	# 		discussion_id: object.id
-	# 		unread_messages: object.discussion_unread_messages.with_discussion_id(object.id).with_user_id(@instance_options[:current_user_id]).first.unread_messages
-	# 	}
-	# end
 	@@colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
 	def access
 		if object.guests.include?(User.find(@instance_options[:current_user_id]))
@@ -56,7 +50,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 				previous_el_id: comment.previous_el_id,
 				discussion_id: object.id,
 				user_id: comment.user_id,
-				user: { name: comment.user.name },
+				user: { name: comment.user.name_with_last_initial },
 				facts: comment.facts.collect do |fact|
 					{
 						content: fact.content,
@@ -85,7 +79,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 				user_id: message.user_id,
 				created_at: message.created_at,
 				user: { 
-					name: message.user.name, 
+					name: message.user.name_with_last_initial, 
 					id: message.user.id
 				}		
 			}
@@ -119,7 +113,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 				if user != object.admin
 					{
 						id: user.id,
-						name: user.name,
+						name: user.name_with_last_initial,
 						group_id: object.group_id,
 						color: @@colors.sample
 					}

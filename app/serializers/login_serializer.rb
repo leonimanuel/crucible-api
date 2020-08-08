@@ -6,7 +6,9 @@ class LoginSerializer < ActiveModel::Serializer
   has_many :facts
   has_many :briefings
 
-
+  def name
+    object.name_with_last_initial
+  end
   
   def discussions
     member_discussions = object.discussions.collect do |discussion|
@@ -73,7 +75,7 @@ class LoginSerializer < ActiveModel::Serializer
         end
         {
           id: user.id,
-          name: user.name,
+          name: user.name_with_last_initial,
           group_id: group.id,
           color: color
         }
@@ -85,7 +87,7 @@ class LoginSerializer < ActiveModel::Serializer
       # binding.pry
       {
         id: discussion.users.first.id,
-        name: discussion.users.first.name, 
+        name: discussion.users.first.name_with_last_initial, 
         group_id: discussion.group_id,
         color: available_colors.sample
       }

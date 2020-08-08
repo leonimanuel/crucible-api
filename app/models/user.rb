@@ -30,4 +30,8 @@ class User < ApplicationRecord
 	has_many :interests, through: :users_interests
 
 	has_many :users_groups_unread_discussions
+
+	def name_with_last_initial
+		"#{self.name} #{self.last_name[0]}."
+	end
 end

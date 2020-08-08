@@ -18,7 +18,7 @@ class GroupSerializer < ActiveModel::Serializer
   def members
   	users = object.users.collect do |user|
   		# if user.id != @instance_options[:current_user_id]
-        { id: user.id, name: user.name, group_id: object.id }
+        { id: user.id, name: user.name_with_last_initial, group_id: object.id }
   		# end
   	end
 

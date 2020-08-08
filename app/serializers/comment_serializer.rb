@@ -5,7 +5,7 @@ class CommentSerializer < ActiveModel::Serializer
 	has_many :facts_comments_reviews
 
 	def user
-		{ name: object.user.name }
+		{ name: object.user.name_with_last_initial }
 	end
 
 	def facts
