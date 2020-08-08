@@ -28,12 +28,12 @@ current_events = ["black lives matter", "covid", "2020 election"]
 current_events.each {|ce| Interest.create(section: "current events", title: ce, query: ce)}
 
 
-fact1 = Fact.create(content: "pandas are big", url: "pandas.com")
-fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com")
-fact5 = Fact.create(content: "Employment in science, technology, engineering and math (STEM) occupations has grown 79% since 1990, from 9.7 million to 17.3 million, outpacing overall U.S. job growth", url: "https://www.pewresearch.org/fact-tank/2018/01/09/7-facts-about-the-stem-workforce/")
+fact1 = Fact.create(content: "pandas are big", url: "pandas.com", collector: billy)
+fact2 = Fact.create(content: "shrimp are small", url: "shrimp.com", collector: billy)
 
-fact3 = Fact.create(content: "science is cool", url: "science.com")
-fact4 = Fact.create(content: "science is hard", url: "science.com")
+fact3 = Fact.create(content: "science is cool", url: "science.com", collector: billy)
+fact4 = Fact.create(content: "science is hard", url: "science.com", collector: billy)
+fact5 = Fact.create(content: "Employment in science, technology, engineering and math (STEM) occupations has grown 79% since 1990, from 9.7 million to 17.3 million, outpacing overall U.S. job growth", url: "https://www.pewresearch.org/fact-tank/2018/01/09/7-facts-about-the-stem-workforce/", collector: megan)
 
 
 new_facts = Topic.find_by(user: billy)
