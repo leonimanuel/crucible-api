@@ -1,4 +1,6 @@
 class Fact < ApplicationRecord
+	belongs_to :collector, foreign_key: "collector_id", class_name: "User"
+	
 	has_one :fact_rephrase
 
 	# has_many :facts_users

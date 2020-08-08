@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
 	has_many :topics
 	has_many :facts, through: :topics
+	has_many :collected_facts, foreign_key: "collector_id", class_name: "Fact"
 
 	has_many :users_groups
 	has_many :groups, through: :users_groups
@@ -23,7 +24,7 @@ class User < ApplicationRecord
 
 	has_many :topics_facts
 
-	has_many :fact_rephrases
+	# has_many :fact_rephrases
 
 	has_many :users_interests
 	has_many :interests, through: :users_interests
