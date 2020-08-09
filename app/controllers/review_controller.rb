@@ -18,8 +18,12 @@ class ReviewController < ApplicationController
 
 		if params[:decision] == "valid"
 			item["#{params[:reviewType]}_upvotes"] += 1
+			user.total_upvotes += 1
+			user.save
 		elsif params[:decision] == "invalid"
 			item["#{params[:reviewType]}_downvotes"] += 1
+			user.total_downvotes += 1
+			user.save			
 		end
 		item.save
 		# binding.pry

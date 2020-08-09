@@ -136,14 +136,14 @@ class DiscussionsController < ApplicationController
 			@discussion.users_and_guests.each do |receiver|
 				DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
 				if receiver != user && @discussion.group.name != "Feed"
-					# ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
+					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
 				end
 			end
 
 			# @discussion.guests.each do |guest|
 			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
 			# end			
-			if params[:extension]
+			if params[:extension]	
 				render json: {slug: @discussion.slug}
 			else
 				render json: @discussion, current_user_id: user.id		

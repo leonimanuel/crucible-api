@@ -54,8 +54,13 @@ class UsersController < ApplicationController
 		user = User.new(name: params[:name], last_name: params[:lastName], handle: params[:handle], email: params[:email], password: params[:password])
 		if user.valid? && !User.find_by(email: params[:email])
 			user.save
-			user.topics << Topic.create(name: "New Facts", user: user)
 			
+			user.topics << Topic.create(name: "New Facts", user: user)
+			feed = Group.create(name: "Feed", admin: user)
+			guest = Group.create(name: "Guest", admin: user)
+			feed.users << user
+			guest.users << user
+
 			command = AuthenticateUser.call(user.email, user.password)
 			render json: { auth_token: command.result, user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
 		else

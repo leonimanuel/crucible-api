@@ -9,6 +9,6 @@ class ApplicationMailer < ActionMailer::Base
   	@discussion = discussion
   	@url = "http://crucible.com"
   	@specialtext = "hey there leon, emailing from croycible"
-  	mail(to: "leonmalisov@gmail.com", subject: "New discussion test")  	
+  	mail(to: @receiver.email, subject: "New discussion test")  	
   end
 end
