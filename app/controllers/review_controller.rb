@@ -3,7 +3,7 @@ class ReviewController < ApplicationController
 		fact = Fact.pending_review.first
 
 		# binding.pry
-		render json: ReviewSerializer.new(fact).to_json
+		render json: ReviewSerializer.new(fact).to_json, current_user_id: user.id	
 	end
 
 	def create
@@ -68,12 +68,17 @@ class ReviewController < ApplicationController
 			decision: params[:decision]
 		)
 
+
+
 		if user_review.save
 			# render json: {status: "success", daily_reviews: user.daily_reviews}	
 			subject = User.find(params[:subjectId])
-			serialized_data = {total_votes: subject.total_votes, daily_reviews: user.daily_reviews}
+			serialized_data = {total_votes: subject.total_votes }
 	    ReviewsChannel.broadcast_to subject, serialized_data
 	    head :ok
+
+	    reviewer_data = { daily_reviews: user.daily_reviews }
+	    ReviewsChannel.broadcast_to user, reviewer_data
 		end
 	end
 end
