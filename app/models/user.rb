@@ -34,4 +34,52 @@ class User < ApplicationRecord
 	def name_with_last_initial
 		"#{self.name} #{self.last_name[0]}."
 	end
+
+	def total_votes
+    items = [Fact.all, FactRephrase.all, Comment.all, FactsComment.all]
+    obj_tallys = items.map do |item_array| 
+      item_tallys = item_array.map do |item|
+				keys = item.attributes.map do |key, value| 
+					key if key.include?("votes")
+				end
+				keys = keys.compact.sort
+
+				item_upvotes = 0
+				item_downvotes = 0
+				score_reviews = keys.each_with_index.map do |attr, index| 
+					if index.even?
+						upvotes = item[keys[index + 1]]
+						downvotes = item[keys[index]]
+
+						item_upvotes += upvotes
+						item_downvotes += downvotes
+					end
+				end
+				{ item_upvotes: item_upvotes, item_downvotes: item_downvotes }    	
+      end
+
+      total_obj_upvotes = 0
+      total_obj_downvotes = 0
+      item_tallys.each do |item_tally|
+      	total_obj_upvotes += item_tally[:item_upvotes]
+      	total_obj_downvotes += item_tally[:item_downvotes]
+      end
+      
+      {obj_upvotes: total_obj_upvotes, obj_downvotes: total_obj_downvotes}
+    end	
+    
+    all_upvotes = 0
+    all_downvotes = 0
+    obj_tallys.each do |obj_tally|
+    	all_upvotes += obj_tally[:obj_upvotes]
+    	all_downvotes += obj_tally[:obj_downvotes]    	
+    end
+
+    {
+    	tallies: { 
+	    	total_upvotes: all_upvotes, total_downvotes: all_downvotes 
+	    	}, 
+	    accuracy: (((all_upvotes + 0.0) / (all_upvotes + all_downvotes)) * 100).round(2)
+    }
+	end
 end

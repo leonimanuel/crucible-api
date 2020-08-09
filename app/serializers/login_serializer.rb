@@ -1,5 +1,5 @@
 class LoginSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :review_score, :reputability_score, :daily_reviews, :daily_streaks
+  attributes :id, :name, :email, :review_score, :reputability_score, :total_votes, :daily_reviews, :daily_streaks
   has_many :groups
   has_many :group_members
   has_many :discussions
@@ -10,6 +10,10 @@ class LoginSerializer < ActiveModel::Serializer
     object.name_with_last_initial
   end
   
+  def total_votes
+    object.total_votes
+  end
+
   def discussions
     member_discussions = object.discussions.collect do |discussion|
       admin_bool = (discussion.admin == object)

@@ -65,7 +65,11 @@ class ReviewController < ApplicationController
 		)
 
 		if user_review.save
-			render json: {status: "success"}	
+			# render json: {status: "success", daily_reviews: user.daily_reviews}	
+			subject = User.find(params[:subjectId])
+			serialized_data = {total_votes: subject.total_votes, daily_reviews: user.daily_reviews}
+	    ReviewsChannel.broadcast_to subject, serialized_data
+	    head :ok
 		end
 	end
 end

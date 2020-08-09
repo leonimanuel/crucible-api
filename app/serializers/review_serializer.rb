@@ -4,7 +4,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	has_many :facts
 	has_many :comments
 	has_many :facts_comments
-	has_many :fact_rephrases
+	# has_many :fact_rephrases
 
 	def facts
 		# binding.pry
@@ -17,7 +17,8 @@ class ReviewSerializer < ActiveModel::Serializer
 					fact_content: fact.content,
 					rephrase_content: fact.fact_rephrase.content,
 					phrasing_upvotes: fact.fact_rephrase.phrasing_upvotes,
-					phrasing_downvotes: fact.fact_rephrase.phrasing_downvotes,						
+					phrasing_downvotes: fact.fact_rephrase.phrasing_downvotes,
+					subject_id: fact.collector_id				
 				}
 
 			elsif fact.review_status === "pending"
@@ -32,8 +33,8 @@ class ReviewSerializer < ActiveModel::Serializer
 					context_downvotes: fact.context_downvotes,
 					credibility_upvotes: fact.credibility_upvotes,
 					credibility_downvotes: fact.credibility_downvotes,
-
-					score: 0	
+					score: 0,
+					subject_id: fact.collector_id										
 				}
 			end
 		end				
@@ -49,7 +50,8 @@ class ReviewSerializer < ActiveModel::Serializer
 					selection: comment.selection,
 					content: comment.content,
 					selection_comment_upvotes: comment.selection_comment_upvotes,
-					selection_comment_downvotes: comment.selection_comment_downvotes		
+					selection_comment_downvotes: comment.selection_comment_downvotes,
+					subject_id: comment.user_id		
 				}		
 			end
 		end
@@ -65,28 +67,29 @@ class ReviewSerializer < ActiveModel::Serializer
 					comment_content: Comment.find(facts_comment.comment_id).content,
 					fact_content: Fact.find(facts_comment.fact_id).content,
 					comment_fact_upvotes: facts_comment.comment_fact_upvotes,
-					comment_fact_downvotes: facts_comment.comment_fact_downvotes		
+					comment_fact_downvotes: facts_comment.comment_fact_downvotes,
+					subject_id: facts_comment.comment.user_id		
 				}						
 			end
 		end
 		facts_comments.compact
 	end
 
-	def fact_rephrases
-		fact_rephrases = FactRephrase.pending_review.all.collect do |fact_rephrase|
-			if fact_rephrase.review_status === "pending"
-				{
-					type: "FactRephrase",
-					id: fact_rephrase.id,
-					fact_content: Fact.find(fact_rephrase.fact_id).content,
-					rephrase_content: fact_rephrase.content,
-					phrasing_upvotes: fact_rephrase.phrasing_upvotes,
-					phrasing_downvotes: fact_rephrase.phrasing_downvotes,				
-				}				
-			end
-		end
-		fact_rephrases.compact
-	end
+	# def fact_rephrases
+	# 	fact_rephrases = FactRephrase.pending_review.all.collect do |fact_rephrase|
+	# 		if fact_rephrase.review_status === "pending"
+	# 			{
+	# 				type: "FactRephrase",
+	# 				id: fact_rephrase.id,
+	# 				fact_content: Fact.find(fact_rephrase.fact_id).content,
+	# 				rephrase_content: fact_rephrase.content,
+	# 				phrasing_upvotes: fact_rephrase.phrasing_upvotes,
+	# 				phrasing_downvotes: fact_rephrase.phrasing_downvotes,				
+	# 			}				
+	# 		end
+	# 	end
+	# 	fact_rephrases.compact
+	# end
 end
 
 
