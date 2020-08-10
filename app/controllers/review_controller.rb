@@ -8,6 +8,8 @@ class ReviewController < ApplicationController
 
 	def create
 		user = @current_user
+		subject = User.find(params[:subjectId])
+
 		item = params[:itemType].constantize.find(params[:itemId])
 		# binding.pry
 		user.increment!("daily_reviews", by = 1)
@@ -18,15 +20,13 @@ class ReviewController < ApplicationController
 
 		if params[:decision] == "valid"
 			item["#{params[:reviewType]}_upvotes"] += 1
-			user.total_upvotes += 1
-			user.save
+			subject.total_upvotes += 1
 		elsif params[:decision] == "invalid"
 			item["#{params[:reviewType]}_downvotes"] += 1
-			user.total_downvotes += 1
-			user.save			
+			subject.total_downvotes += 1
 		end
 		item.save
-		# binding.pry
+		subject.save	
 
 		keys = item.attributes.map do |key, value| 
 			key if key.include?("votes")
@@ -72,13 +72,14 @@ class ReviewController < ApplicationController
 
 		if user_review.save
 			# render json: {status: "success", daily_reviews: user.daily_reviews}	
-			subject = User.find(params[:subjectId])
+			
 			serialized_data = {total_votes: subject.total_votes }
 	    ReviewsChannel.broadcast_to subject, serialized_data
 	    head :ok
 
 	    reviewer_data = { daily_reviews: user.daily_reviews }
 	    ReviewsChannel.broadcast_to user, reviewer_data
+	    head :ok
 		end
 	end
 end
