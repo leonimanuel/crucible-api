@@ -25,7 +25,7 @@ gem "curb"
 gem "rest-client"
 gem "dotenv-rails"
 
-gem "whenever", require: false
+gem 'whenever', require: false
 
 gem 'slugify', '~> 1.0', '>= 1.0.7'
 

@@ -47,6 +47,9 @@ class User < ApplicationRecord
 		}
 	end
 
+	def self.reset_daily_reviews
+		self.update_all("daily_reviews = 0")
+	end
 	# def total_votes
  #    items = [Fact.all, FactRephrase.all, Comment.all, FactsComment.all]
  #    obj_tallys = items.map do |item_array| 

@@ -18,7 +18,6 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-# set :output, "/path/to/my/cron_log.log"
-# every 1.minute do
-#   runner 'User.find(1).increment!("daily_reviews", by = 1)'
-# end
+every 1.minute do
+  runner "User.reset_daily_reviews"
+end
