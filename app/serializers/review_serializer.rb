@@ -7,8 +7,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	# has_many :fact_rephrases
 
 	def facts
-		# binding.pry
-		facts = Fact.pending_review.all.collect do |fact|
+		facts = Fact.pending_review.where.not(collector_id: object.id).collect do |fact|
 			if fact.fact_rephrase && fact.fact_rephrase.review_status === "pending"
 				# binding.pry
 				{
@@ -42,7 +41,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	end
 
 	def comments
-		comments = Comment.pending_review.all.collect do |comment|
+		comments = Comment.pending_review.where.not(user_id: object.id).collect do |comment|
 			if comment.review_status === "pending"
 				{	
 					type: "Comment",
@@ -60,17 +59,19 @@ class ReviewSerializer < ActiveModel::Serializer
 
 	def facts_comments
 		facts_comments = FactsComment.pending_review.all.collect do |facts_comment|
-			if facts_comment.review_status === "pending"
-				{	
-					type: "FactsComment",
-					id: facts_comment.id,
-					comment_content: Comment.find(facts_comment.comment_id).content,
-					fact_content: Fact.find(facts_comment.fact_id).content,
-					comment_fact_upvotes: facts_comment.comment_fact_upvotes,
-					comment_fact_downvotes: facts_comment.comment_fact_downvotes,
-					subject_id: facts_comment.comment.user_id		
-				}						
-			end
+			# unless facts_comment.comment.user_id == object.id
+				if facts_comment.review_status === "pending"
+					{	
+						type: "FactsComment",
+						id: facts_comment.id,
+						comment_content: Comment.find(facts_comment.comment_id).content,
+						fact_content: Fact.find(facts_comment.fact_id).content,
+						comment_fact_upvotes: facts_comment.comment_fact_upvotes,
+						comment_fact_downvotes: facts_comment.comment_fact_downvotes,
+						subject_id: facts_comment.comment.user_id		
+					}						
+				end				
+			# end
 		end
 		facts_comments.compact
 	end

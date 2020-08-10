@@ -1,9 +1,8 @@
 class ReviewController < ApplicationController
 	def index
-		fact = Fact.pending_review.first
-
-		# binding.pry
-		render json: ReviewSerializer.new(fact).to_json, current_user_id: user.id	
+		# fact = Fact.pending_review.first
+		user = @current_user
+		render json: ReviewSerializer.new(user).to_json
 	end
 
 	def create
