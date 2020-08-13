@@ -37,11 +37,30 @@ class DiscussionsController < ApplicationController
 		end
 	end
 
+	def createGURL
+		require 'uri'
+		require 'net/http'
+		require 'openssl'
+
+		url = URI("https://full-text-rss.p.rapidapi.com/extract.php")
+
+		http = Net::HTTP.new(url.host, url.port)
+		http.use_ssl = true
+		http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+		request = Net::HTTP::Post.new(url)
+		request["x-rapidapi-host"] = 'full-text-rss.p.rapidapi.com'
+		request["x-rapidapi-key"] = 'e95db40937mshaa3bb0066f2c48ap190307jsn62d857e3b282'
+		request["content-type"] = 'application/x-www-form-urlencoded'
+		request["url"] = "https://www.cnn.com/interactive/2019/02/business/starbucks-cup-problem/index.html"
+		request.body = "url=https://www.wired.com/story/why-wikipedia-decided-to-stop-calling-fox-a-reliable-source/"
+
+		response = http.request(request)
+		binding.pry
+		# puts response.read_body		
+	end
+
 	def create
-		#GNEWS
-		# uri = URI('https://gnews.io/api/v3/search?q=uighur detention camps?&token=a3cbbbace66491b895eb064379755ca7')
-		# thing = Net::HTTP.get(uri) # => String
-		# suggestions = JSON.parse(thing)
 		user = @current_user
 		
 		if params[:extension]
@@ -62,23 +81,12 @@ class DiscussionsController < ApplicationController
 			sites = %w(brookings.edu) # brookings.edu csis.org rand.org
 			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
 
-			# uri = URI("https://gnews.io/api/v3/search?q=#{interest.query}&max=100&token=a3cbbbace66491b895eb064379755ca7")
-			# thing = Net::HTTP.get(uri) # => String
-			# suggestions = JSON.parse(thing)
-			# sources = suggestions["articles"].map {|ar| ar["source"]["name"]}
-			# article_url = suggestions["articles"].sample["url"]
-			# textapi = AylienTextApi::Client.new(app_id: "0d507a71", app_key: "1357374853ea0c2ec00409cd29899ee5")
-			# url = "http://techcrunch.com/2015/04/06/john-oliver-just-changed-the-surveillance-reform-debate"
-
-			# extract = textapi.extract(url: url, best_image: true)
-
 			res = RestClient.get("https://api.cognitive.microsoft.com/bing/v7.0/search?freshness=Day&q=#{interest.query} (#{sites_query})", headers={
 				"Ocp-Apim-Subscription-Key": "b802d49bc8e247acac1a1fe236710554"
 			})
 			articles = JSON.parse(res)["webPages"]["value"]
 			article_names = articles.map {|a| a["name"]}
 			article_url = articles.map {|a| a["url"]}.sample
-			# puts article_url
 		else
 			article_url = params[:articleURL]
 		end

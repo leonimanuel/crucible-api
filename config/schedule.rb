@@ -18,6 +18,6 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every 1.minute do
-  runner "User.reset_daily_reviews"
-end
+# every 1.minute do
+#   runner "User.reset_daily_reviews"
+# end

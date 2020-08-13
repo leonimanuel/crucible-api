@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hi, <%= @new_user.name %></h1>
+    <h3>Please confirm your email by clicking the button below.</h3>
+    <button><%= link_to "confirm email", @url, :target => "_blank" %></button>
+  </body>
+</html>

@@ -38,14 +38,21 @@ class CommentsController < ApplicationController
         DiscussionUnreadMessage.with_discussion_id(discussion.id).find_by(user_id: recipient.id).update(unread_messages: MessagesUsersRead.unread.with_user_id(recipient.id).with_discussion_id(discussion.id).count)
       end
 
-      serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        MessageSerializer.new(message)).serializable_hash
-        ActionCable.server.broadcast "messages_channel", serialized_data
-      head :ok
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(MessageSerializer.new(message)).serializable_hash
+      discussion.users_and_guests.each do |user|
+        MessagesChannel.broadcast_to user, serialized_data
+        head :ok
+      end        
 
-      serialized_notification_data = {discussion_id: discussion.id, unread_messages: 1, sender_id: user.id}
-      ActionCable.server.broadcast "message_notifications_channel", serialized_notification_data
-      head :ok
+      serialized_notification_data = {
+        discussion_id: discussion.id, 
+        unread_messages: 1, 
+        sender_id: user.id
+      }
+      discussion.users_and_guests.each do |user|
+        MessageNotificationsChannel.broadcast_to user, serialized_notification_data
+        head :ok
+      end
     end
 	end
 
