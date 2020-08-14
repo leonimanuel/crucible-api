@@ -27,5 +27,7 @@ Rails.application.routes.draw do
   post "authenticate", to: "authentication#authenticate"
   get "/confirm-email/:token" => "users#confirm_email"
 
+  post "/feedback" => "users#feedback"
+
   mount ActionCable.server => '/cable'
 end

@@ -76,6 +76,12 @@ class UsersController < ApplicationController
 			render json: { auth_token: command.result, user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
 		end
 	end
+
+	def feedback
+		# binding.pry
+		ApplicationMailer.send_feedback(@current_user, params[:feedback]).deliver_now
+		render json: {message: "feedback successfully submitted"}
+	end
 end
 
 

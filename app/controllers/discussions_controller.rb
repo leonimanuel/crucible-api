@@ -37,7 +37,7 @@ class DiscussionsController < ApplicationController
 		end
 	end
 
-	def createGURL
+	def create
 		require 'uri'
 		require 'net/http'
 		require 'openssl'
@@ -53,14 +53,13 @@ class DiscussionsController < ApplicationController
 		request["x-rapidapi-key"] = 'e95db40937mshaa3bb0066f2c48ap190307jsn62d857e3b282'
 		request["content-type"] = 'application/x-www-form-urlencoded'
 		request["url"] = "https://www.cnn.com/interactive/2019/02/business/starbucks-cup-problem/index.html"
-		request.body = "url=https://www.wired.com/story/why-wikipedia-decided-to-stop-calling-fox-a-reliable-source/"
+		request.body = "parser=html5php&url=https://www.wired.com/story/why-wikipedia-decided-to-stop-calling-fox-a-reliable-source/"
 
 		response = http.request(request)
-		binding.pry
 		# puts response.read_body		
 	end
 
-	def create
+	def createBOI
 		user = @current_user
 		
 		if params[:extension]
@@ -78,7 +77,7 @@ class DiscussionsController < ApplicationController
 
 			all_sites = %w(nytimes.com wsj.com washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
 			sites = %w(nytimes.com wsj.com bbc.com economist.com newyorker.com cfr.org theatlantic.com usatoday.com slate.com salon.com cnn.com foxnews.com theintercept.com bloomberg.com thedailybeast.com)
-			sites = %w(brookings.edu) # brookings.edu csis.org rand.org
+			# sites = %w(brookasdfings.edu) # brookings.edu csis.org rand.org
 			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
 
 			res = RestClient.get("https://api.cognitive.microsoft.com/bing/v7.0/search?freshness=Day&q=#{interest.query} (#{sites_query})", headers={
@@ -184,6 +183,7 @@ class DiscussionsController < ApplicationController
 		guestIds.each do |guestId|
 			user = User.find(guestId)
 			@discussion.guests << user
+			# MAILER GOES HERE !!!!
 			DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)
 			UsersGroupsUnreadDiscussion.create(user: user, group: user.groups.find_by(name: "Guest"), discussion: @discussion)			
 		end

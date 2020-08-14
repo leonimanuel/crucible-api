@@ -3,7 +3,6 @@ class AuthenticationController < ApplicationController
 
 	def authenticate
 	  command = AuthenticateUser.call(params[:email], params[:password])
-	  binding.pry
   	if command.success?
 			user = User.find_by(email: params[:email])
 			group_names = user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
@@ -18,7 +17,6 @@ class AuthenticationController < ApplicationController
 					group_names: group_names
 				} 
 			}
-	   # render json: [{ auth_token: command.result }, JSON.parse(UserSerializer.new(user).to_serialized_json)]
 	  else
 	    render json: { error: command.errors }, status: :unauthorized
 	  end
