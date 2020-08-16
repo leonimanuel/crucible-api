@@ -5,12 +5,16 @@ class CommentSerializer < ActiveModel::Serializer
 	has_many :facts_comments_reviews
 
 	def user
-		{ name: object.user.name_with_last_initial }
+		{ 
+			name: object.user.name_with_last_initial,
+			daily_facts_comments: object.user.daily_facts_comments
+		}
 	end
 
 	def facts
 		object.facts.collect do |fact|
 			{
+				id: fact.id,
 				content: fact.content,
 				comment_id: object.id
 			}

@@ -3,7 +3,7 @@ class FactsController < ApplicationController
 
 	def create
 		user = @current_user
-
+		# binding.pry
 		if params[:origin_topic_name] && params[:destination_topic_name]
 			@fact = Fact.find(params[:fact_id])
 			origin_topic = user.topics.find_by(name: params[:origin_topic_name])
@@ -17,16 +17,17 @@ class FactsController < ApplicationController
 			# render json: TopicSerializer.new(origin_topic.subtree).to_serialized_json_tree
 			# render json: FactSerializer.new(fact).to_serialized_json
 		elsif params[:factId]
-			fact = Fact.find(params[:factId])
-			
-			if user.facts.include?(fact)
+			@fact = Fact.find(params[:factId])
+			# binding.pry
+			if user.facts.include?(@fact)
 				render json: {error: "you've already collected this fact"}
 			else
 				topic = user.topics.find_by(name: "New Facts")
-				topic.facts << fact
+				topic.facts << @fact
 				render json: @fact, topic_id: topic.id				
 			end
 		else
+			# binding.pry
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
 			if @fact.valid?
 				@fact.save

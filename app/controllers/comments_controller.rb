@@ -15,6 +15,7 @@ class CommentsController < ApplicationController
 		params[:factIds].each do |factId|
 			fact = Fact.find(factId)
 			comment.facts << fact
+      user.increment!("daily_facts_comments", by = 1)
 		end
 
 

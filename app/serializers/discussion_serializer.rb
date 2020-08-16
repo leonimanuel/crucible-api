@@ -53,6 +53,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 				user: { name: comment.user.name_with_last_initial },
 				facts: comment.facts.collect do |fact|
 					{
+						id: fact.id,
 						content: fact.content,
 						comment_id: comment.id
 					}

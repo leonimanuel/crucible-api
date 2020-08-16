@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_11_153318) do
+ActiveRecord::Schema.define(version: 2020_08_14_193043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,6 +225,7 @@ ActiveRecord::Schema.define(version: 2020_08_11_153318) do
     t.boolean "feed_email", default: true
     t.boolean "email_confirmed", default: false
     t.string "confirm_token"
+    t.integer "daily_facts_comments", default: 0
   end
 
   create_table "users_groups", force: :cascade do |t|

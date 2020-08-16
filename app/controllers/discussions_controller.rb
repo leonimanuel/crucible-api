@@ -37,7 +37,7 @@ class DiscussionsController < ApplicationController
 		end
 	end
 
-	def create
+	def createGURL
 		require 'uri'
 		require 'net/http'
 		require 'openssl'
@@ -59,7 +59,7 @@ class DiscussionsController < ApplicationController
 		# puts response.read_body		
 	end
 
-	def createBOI
+	def create
 		user = @current_user
 		
 		if params[:extension]
