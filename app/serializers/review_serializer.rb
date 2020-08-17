@@ -2,9 +2,10 @@ class ReviewSerializer < ActiveModel::Serializer
 	has_many :facts
 	has_many :comments
 	has_many :facts_comments
-	# has_many :fact_rephrases
 
 	def facts
+		done_reviews = UsersReview.where(user: object, review_object: "Fact")
+		
 		facts = Fact.pending_review.where.not(collector_id: object.id).first(10).collect do |fact|
 			if fact.fact_rephrase && fact.fact_rephrase.review_status === "pending"
 				if !UsersReview.where(user: object, review_object: "FactRephrase").map {|record| record.object_id}.include?(fact.fact_rephrase.id)
@@ -20,11 +21,13 @@ class ReviewSerializer < ActiveModel::Serializer
 				end
 			
 			elsif fact.review_status === "pending"
-				if !UsersReview.where(user: object, review_object: "Fact").map {|record| record.object_id}.include?(fact.id)
+				review_types = done_reviews.where(object_id: fact.id).map {|record| record.review_type}
+				if review_types.count < 3
 					{	
 						type: "Fact",
 						id: fact.id,
 						content: fact.content,
+						review_types: review_types,
 						url: fact.url,
 						logic_upvotes: fact.logic_upvotes,
 						logic_downvotes: fact.logic_downvotes,
