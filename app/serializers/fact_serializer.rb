@@ -1,5 +1,5 @@
 class FactSerializer < ActiveModel::Serializer
-	attributes :id, :content, :rephrase, :logic_upvotes, :logic_downvotes, :context_upvotes, :context_downvotes, :credibility_upvotes, :credibility_downvotes, :review_status, :topic_id
+	attributes :id, :content, :rephrase, :url, :logic_upvotes, :logic_downvotes, :context_upvotes, :context_downvotes, :credibility_upvotes, :credibility_downvotes, :review_status, :topic_id
 
 	def rephrase
 		object.fact_rephrase

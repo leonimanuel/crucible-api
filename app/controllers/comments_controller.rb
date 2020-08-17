@@ -14,7 +14,8 @@ class CommentsController < ApplicationController
 
 		params[:factIds].each do |factId|
 			fact = Fact.find(factId)
-			comment.facts << fact
+			# comment.facts << fact
+      FactsComment.create(comment: comment, fact: fact, user_id: user.id)
       user.increment!("daily_facts_comments", by = 1)
 		end
 
@@ -65,7 +66,6 @@ class CommentsController < ApplicationController
 		else
 			render json: {error: "You must be a part of this group to view this discussion"}
 		end
-
 	end
 end
 
