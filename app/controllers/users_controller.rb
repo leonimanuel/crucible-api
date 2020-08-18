@@ -41,9 +41,9 @@ class UsersController < ApplicationController
 		user = User.new(name: params[:name], last_name: params[:lastName], handle: params[:handle], email: params[:email], password: params[:password])
 
 		if user.valid? && !User.find_by(email: params[:email])
-			confirmation_token = SecureRandom.urlsafe_base64.to_s
-			user.confirm_token = confirmation_token
 			user.save
+			confirmation_token = SecureRandom.urlsafe_base64.to_s
+			user.update(confirm_token: confirmation_token)
 			
 			user.topics << Topic.create(name: "New Facts", user: user)
 			feed = Group.create(name: "Feed", admin: user)
