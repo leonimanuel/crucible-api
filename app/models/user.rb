@@ -31,6 +31,9 @@ class User < ApplicationRecord
 
 	has_many :users_groups_unread_discussions
 
+	has_many :fact_grabs, foreign_key: "grabber_id"
+	has_many :fact_gives, class_name: "FactGrab", foreign_key: "giver_id"
+
 	def name_with_last_initial
 		"#{self.name} #{self.last_name[0]}."
 	end

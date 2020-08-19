@@ -18,16 +18,31 @@ class FactsController < ApplicationController
 			# render json: FactSerializer.new(fact).to_serialized_json
 		elsif params[:factId]
 			@fact = Fact.find(params[:factId])
-			# binding.pry
+			
+			comment_author = User.find(params[:authorId]) 
+			fact_grab = FactGrab.create(fact: @fact, grabber: user, giver: comment_author)
+
+			current_giver = comment_author
+			until current_giver == @fact.collector
+				current_giver.increment!("reach_score", by = 50)
+				current_giver = current_giver.fact_grabs.find_by(fact: @fact).giver
+			end
+
+			if current_giver == @fact.collector
+				current_giver.increment!("reach_score", by = 100)
+			end
+
+
 			if user.facts.include?(@fact)
 				render json: {error: "you've already collected this fact"}
 			else
 				topic = user.topics.find_by(name: "New Facts")
 				topic.facts << @fact
+
+				
 				render json: @fact, topic_id: topic.id				
 			end
 		else
-			# binding.pry
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
 			if @fact.valid?
 				@fact.save
