@@ -129,6 +129,7 @@ class DiscussionsController < ApplicationController
 				discussion: @discussion
 			)
 
+			# how come not guests too?
 			@discussion.users.each do |member|
 				UsersGroupsUnreadDiscussion.create(user: member, group: @discussion.group, discussion: @discussion)				
 			end

@@ -73,6 +73,26 @@ class UsersController < ApplicationController
 		user = User.find_by(confirm_token: params[:token])
 		if user
 			user.update(email_confirmed: true, confirm_token: nil)
+
+			instruction_discussion = Discussion.create(
+				name: "Getting Started with Crucible", 
+				slug: "crucible-getting-started",
+				group: user.groups.find_by(name: "Feed"), 
+				article_url: "",
+				admin: user
+			)
+
+			instruction_article = Article.create(
+				title: "Getting Started with Crucible", 
+				author: "Crucible",
+				date_published: Time.now,
+				content: "crucible tutorial", 
+				discussion: instruction_discussion
+			)
+
+			UsersGroupsUnreadDiscussion.create(user: user, group: instruction_discussion.group, discussion: instruction_discussion)				
+			DiscussionUnreadMessage.create(user: user, discussion: instruction_discussion, unread_messages: 0)
+
 			render json: { auth_token: command.result, user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
 		end
 	end
