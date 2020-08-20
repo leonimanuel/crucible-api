@@ -47,7 +47,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	def comments
 		comments = Comment.pending_review.where.not(user_id: object.id).first(10).collect do |comment|
 			if !UsersReview.where(user: object, review_object: "Comment").map {|record| record.object_id}.include?(comment.id)
-				if comment.review_status === "pending"
+				if comment.review_status === "pending" && comment.discussion.name != "Getting Started with Crucible"
 					{	
 						type: "Comment",
 						id: comment.id,
@@ -66,7 +66,7 @@ class ReviewSerializer < ActiveModel::Serializer
 	def facts_comments
 		facts_comments = FactsComment.pending_review.where.not(user_id: object.id).first(10).collect do |facts_comment|
 			if !UsersReview.where(user: object, review_object: "FactsComment").map {|record| record.object_id}.include?(facts_comment.id)
-				if facts_comment.review_status === "pending"
+				if facts_comment.review_status === "pending" && facts_comment.comment.discussion.name != "Getting Started with Crucible"
 					{	
 						type: "FactsComment",
 						id: facts_comment.id,

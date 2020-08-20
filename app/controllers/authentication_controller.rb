@@ -7,16 +7,24 @@ class AuthenticationController < ApplicationController
 			user = User.find_by(email: params[:email])
 			group_names = user.groups.map {|g| g.name unless g.name == "Feed" || g.name == "Guest"}.compact
 			
-			render json: { 
-				auth_token: command.result, 
-				user: {
-					id: user.id, 
-					name: user.name, 
-					email: user.email,
-					unread_messages_count: MessagesUsersRead.where(user: user, read: false).count,
-					group_names: group_names
-				} 
-			}
+			if user.email_confirmed
+				render json: { 
+					auth_token: command.result, 
+					user: {
+						id: user.id, 
+						name: user.name, 
+						email: user.email,
+						unread_messages_count: MessagesUsersRead.where(user: user, read: false).count,
+						group_names: group_names
+					} 
+				}			
+			else				
+				confirmation_token = SecureRandom.urlsafe_base64.to_s
+				user.update(confirm_token: confirmation_token)
+				ApplicationMailer.confirm_email(user, confirmation_token).deliver_now
+
+				render json: { message: "Please verify your account using the link emailed to you" }				
+			end
 	  else
 	    render json: { error: command.errors }, status: :unauthorized
 	  end

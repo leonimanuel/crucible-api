@@ -90,12 +90,28 @@ class UsersController < ApplicationController
 				discussion: instruction_discussion
 			)
 
-			UsersGroupsUnreadDiscussion.create(user: user, group: instruction_discussion.group, discussion: instruction_discussion)				
-			DiscussionUnreadMessage.create(user: user, discussion: instruction_discussion, unread_messages: 0)
+			# admin_guest = User.find_by(email: "leonmalisov@gmail.com")
+			# discussion.guests << User.find()
 
-			render json: { auth_token: command.result, user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
+			UsersGroupsUnreadDiscussion.create(user: user, group: instruction_discussion.group, discussion: instruction_discussion)				
+			# instruction_discussion.users_and_guests do |user|
+				DiscussionUnreadMessage.create(user: user, discussion: instruction_discussion, unread_messages: 0)	
+			# end
+			
+
+			render json: { user: {id: user.id, name: user.name_with_last_initial, email: user.email} }
 		end
 	end
+
+	def resend_confirmation
+		binding.pry
+		user = @current_user
+		confirmation_token = SecureRandom.urlsafe_base64.to_s
+		user.update(confirm_token: confirmation_token)
+		ApplicationMailer.confirm_email(user, confirmation_token).deliver_now
+
+		render json: { message: "Please verify your account using the link emailed to you" }
+	end	
 
 	def feedback
 		# binding.pry

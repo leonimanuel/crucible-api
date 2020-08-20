@@ -43,6 +43,7 @@ class FactsController < ApplicationController
 				render json: @fact, topic_id: topic.id				
 			end
 		else
+			# If adding manually through the app, which hasn't been implemented yet.
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
 			if @fact.valid?
 				@fact.save
@@ -67,6 +68,11 @@ class FactsController < ApplicationController
 			end
 			topic = user.topics.find_by(name: "New Facts")
 			topic.facts << fact
+			
+			serialized_data = ActiveModelSerializers::Adapter::Json.new(FactSerializer.new(fact)).serializable_hash
+      MiscChannel.broadcast_to user, serialized_data
+      head :ok
+
 			render json: {status: "success"}
 		end
 	end
