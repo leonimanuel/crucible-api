@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
 
     message = Message.new(text: params[:comment_text], discussion: discussion, user: user, message_type: "comment", previous_el_id: params[:previous_el_id])
     if message.save
-      recipients = message.discussion.users.select do |user|
+      recipients = message.discussion.users_and_guests.select do |user|
         user.id != message.user_id
       end
 
@@ -40,18 +40,20 @@ class CommentsController < ApplicationController
         DiscussionUnreadMessage.with_discussion_id(discussion.id).find_by(user_id: recipient.id).update(unread_messages: MessagesUsersRead.unread.with_user_id(recipient.id).with_discussion_id(discussion.id).count)
       end
 
+
       serialized_data = ActiveModelSerializers::Adapter::Json.new(MessageSerializer.new(message)).serializable_hash
       discussion.users_and_guests.each do |user|
         MessagesChannel.broadcast_to user, serialized_data
         head :ok
       end        
 
+
       serialized_notification_data = {
         discussion_id: discussion.id, 
         unread_messages: 1, 
         sender_id: user.id
       }
-      discussion.users_and_guests.each do |user|
+      recipients.each do |user|
         MessageNotificationsChannel.broadcast_to user, serialized_notification_data
         head :ok
       end
