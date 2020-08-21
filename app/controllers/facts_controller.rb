@@ -68,12 +68,11 @@ class FactsController < ApplicationController
 			end
 			topic = user.topics.find_by(name: "New Facts")
 			topic.facts << fact
-			
-			serialized_data = ActiveModelSerializers::Adapter::Json.new(FactSerializer.new(fact)).serializable_hash
+			serialized_data = ActiveModelSerializers::Adapter::Json.new(FactSerializer.new(fact, {topic_id: topic.id})).serializable_hash
       MiscChannel.broadcast_to user, serialized_data
       head :ok
 
-			render json: {status: "success"}
+			# render json: {status: "success"}
 		end
 	end
 end

@@ -1,5 +1,5 @@
 class DiscussionSerializer < ActiveModel::Serializer
-	attributes :id, :name, :slug, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin, :read
+	attributes :id, :type, :name, :slug, :access, :group_id, :unread_messages_count, :created_at, :article_url, :admin, :read
 	has_one :article
 	has_many :comments
 	# has_many :unread_messages
@@ -9,6 +9,10 @@ class DiscussionSerializer < ActiveModel::Serializer
 	has_many :members
 	
 	@@colors = %w(#abf0e9 #f9b384 #84a9ac #5c2a9d #abc2e8 #cfe5cf #e8505b)
+	def type
+		"discussion"
+	end
+
 	def access
 		if object.guests.include?(User.find(@instance_options[:current_user_id]))
 			"guest"

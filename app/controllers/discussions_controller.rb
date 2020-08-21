@@ -112,7 +112,7 @@ class DiscussionsController < ApplicationController
 		boi = JSON.parse(response.body)
 		json_response = boi[0]["article"]
 
-		if json_response
+		if json_response && json_response["articleBodyHtml"]
 			@discussion = Discussion.create(
 				name: json_response["headline"], 
 				slug: json_response["headline"].slugify,
@@ -146,16 +146,28 @@ class DiscussionsController < ApplicationController
 				if receiver != user && @discussion.group.name != "Feed"
 					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
 				end
+			
+				serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
+	      MiscChannel.broadcast_to receiver, serialized_data
+	      head :ok	
 			end
 
+			# OLD
 			# @discussion.guests.each do |guest|
 			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
 			# end			
-			if params[:extension]	
-				render json: {slug: @discussion.slug, discussion_id: @discussion.id}
-			else
-				render json: @discussion, current_user_id: user.id		
-			end			
+
+
+			# if params[:extension]	
+			# 	render json: {slug: @discussion.slug, discussion_id: @discussion.id}
+			# else
+			# 	render json: @discussion, current_user_id: user.id		
+			# end		
+		else
+			# binding.pry
+			serialized_data = {discussion: { error: "could not create discussion from this source"} }
+      MiscChannel.broadcast_to user, serialized_data
+      head :ok					
 		end
 	end
 

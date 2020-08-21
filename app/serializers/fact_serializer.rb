@@ -11,10 +11,10 @@ class FactSerializer < ActiveModel::Serializer
 	end
 
   def topic_id
-  	if @instance_options[:topic_id]
+    if @instance_options[:topic_id]
   		@instance_options[:topic_id]
   	else
-  		TopicsFact.where(topic: Topic.where(user_id: @instance_options[:current_user_id]).map {|t| t.id }).where(fact_id: object.id).first.topic_id
+      TopicsFact.where(topic: Topic.where(user_id: @instance_options[:current_user_id]).map {|t| t.id }).where(fact_id: object.id).first.topic_id
   	end
   end
 end
