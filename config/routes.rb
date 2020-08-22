@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   resources :interests, only: [:index, :update, :create]
 
+  resources :briefings, only: [:create, :index, :show, :update, :delete]
+
   get "/review" => "review#index"
   post "/review" => "review#create"
   get "/email" => "users#invite"
@@ -29,6 +31,5 @@ Rails.application.routes.draw do
   get "/resend-confirmation-email" => "users#resend_confirmation"
 
   post "/feedback" => "users#feedback"
-
   mount ActionCable.server => '/cable'
 end

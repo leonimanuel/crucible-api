@@ -6,6 +6,7 @@ class CommentSerializer < ActiveModel::Serializer
 
 	def user
 		{ 
+			id: object.user.id,
 			name: object.user.name_with_last_initial,
 			daily_facts_comments: object.user.daily_facts_comments
 		}
