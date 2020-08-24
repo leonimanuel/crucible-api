@@ -10,10 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_161131) do
+ActiveRecord::Schema.define(version: 2020_08_24_171103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "article_interests", force: :cascade do |t|
+    t.bigint "article_id", null: false
+    t.bigint "interest_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_article_interests_on_article_id"
+    t.index ["interest_id"], name: "index_article_interests_on_interest_id"
+  end
+
+  create_table "article_rec_interests", force: :cascade do |t|
+    t.bigint "article_recommendation_id", null: false
+    t.bigint "interest_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_recommendation_id"], name: "index_article_rec_interests_on_article_recommendation_id"
+    t.index ["interest_id"], name: "index_article_rec_interests_on_interest_id"
+  end
+
+  create_table "article_recommendations", force: :cascade do |t|
+    t.string "url"
+    t.string "article_type"
+    t.boolean "live", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -280,6 +306,10 @@ ActiveRecord::Schema.define(version: 2020_08_19_161131) do
     t.index ["user_id"], name: "index_users_reviews_on_user_id"
   end
 
+  add_foreign_key "article_interests", "articles"
+  add_foreign_key "article_interests", "interests"
+  add_foreign_key "article_rec_interests", "article_recommendations"
+  add_foreign_key "article_rec_interests", "interests"
   add_foreign_key "comments", "discussions"
   add_foreign_key "discussion_unread_messages", "discussions"
   add_foreign_key "discussion_unread_messages", "users"
