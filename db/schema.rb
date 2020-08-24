@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_24_171103) do
+ActiveRecord::Schema.define(version: 2020_08_24_175813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2020_08_24_171103) do
     t.bigint "discussion_id"
     t.string "author"
     t.string "date_published"
+    t.string "url"
     t.index ["discussion_id"], name: "index_articles_on_discussion_id"
   end
 
@@ -97,6 +98,7 @@ ActiveRecord::Schema.define(version: 2020_08_24_171103) do
     t.bigint "group_id"
     t.string "slug"
     t.integer "admin_id"
+    t.integer "article_id"
     t.index ["group_id"], name: "index_discussions_on_group_id"
   end
 

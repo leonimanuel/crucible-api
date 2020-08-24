@@ -3,8 +3,10 @@ class Discussion < ApplicationRecord
 	belongs_to :admin, foreign_key: "admin_id", class_name: "User"
 
 	belongs_to :group
+	belongs_to :article
+
 	has_many :users, through: :group
-	has_one :article, dependent: :destroy
+	# has_one :article, dependent: :destroy
 
 	has_many :comments, dependent: :destroy
 	has_many :messages, dependent: :destroy
