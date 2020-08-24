@@ -33,5 +33,35 @@ class Discussion < ApplicationRecord
 		return DiscussionSerializer.unread_messages_by_user
 	end
 
+	def self.new_discussion(article, user, group)
+		@discussion = self.create(
+			name: article.title, 
+			slug: article.title.slugify,
+			group: group, 
+			article_url: article.url,
+			admin: user,
+			article: article
+		)
+		
+		# how come not guests too?
+		@discussion.users.each do |member|
+			UsersGroupsUnreadDiscussion.create(user: member, group: @discussion.group, discussion: @discussion)				
+		end
 
+		if group.name == "Feed"
+			guest = User.where.not(id: user.id).sample
+			@discussion.guests << guest
+			UsersGroupsUnreadDiscussion.create(user: guest, group: guest.groups.find_by(name: "Guest"), discussion: @discussion)
+			# guest.groups.find_by(name: "Guest") << @discussion
+		end
+
+		@discussion.users_and_guests.each do |receiver|
+			DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
+			if receiver != user && @discussion.group.name != "Feed"
+				ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
+			end
+		end
+	
+		return @discussion
+	end
 end

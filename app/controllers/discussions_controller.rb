@@ -75,101 +75,24 @@ class DiscussionsController < ApplicationController
 				interest = user.interests.sample
 			end
 
-			all_sites = %w(nytimes.com wsj.com washingtonpost.com bbc.com economist.com newyorker.com cfr.org theatlantic.com politico.com)
-			sites = %w(nytimes.com wsj.com bbc.com economist.com newyorker.com cfr.org theatlantic.com usatoday.com slate.com salon.com cnn.com foxnews.com theintercept.com bloomberg.com thedailybeast.com)
-			# sites = %w(brookasdfings.edu) # brookings.edu csis.org rand.org
-			sites_query = sites.map { |domain| "site:#{domain}" }.join(" OR ")
-
-			res = RestClient.get("https://api.cognitive.microsoft.com/bing/v7.0/search?freshness=Day&q=#{interest.query} (#{sites_query})", headers={
-				"Ocp-Apim-Subscription-Key": "b802d49bc8e247acac1a1fe236710554"
-			})
-			articles = JSON.parse(res)["webPages"]["value"]
-			article_names = articles.map {|a| a["name"]}
-			article_url = articles.map {|a| a["url"]}.sample
+			article_url = Article.get_article_rec_url(interest)
 		else
 			article_url = params[:articleURL]
 		end
 
 		article = Article.find_by(url: article_url)
 		if !article
-			uri = URI.parse("https://autoextract.scrapinghub.com/v1/extract")
-			request = Net::HTTP::Post.new(uri)
-			request.basic_auth("35f5808325ea48adb080ab0f82a5c431", "")
-			request.content_type = "application/json"
-			request.body = JSON.dump([
-			  {
-			    "url" => article_url,
-			    "pageType" => "article",
-			    "articleBodyRaw" => false
-			  }
-			])
-
-			req_options = {
-			  use_ssl: uri.scheme == "https",
-			}
-
-			response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-			  http.request(request)
-			end
-			boi = JSON.parse(response.body)
-			json_response = boi[0]["article"]
-
-			if json_response && json_response["articleBodyHtml"]
-				article = Article.create(
-					title: json_response["headline"], 
-					author: json_response["author"],
-					date_published: json_response["datePublishedRaw"],
-					content: json_response["articleBodyHtml"],
-					url: article_url 
-					# discussion: @discussion
-				)
-			end			
+			article = Article.new_article_from_url(article_url)
 		end
 
 		if article
-			@discussion = Discussion.create(
-				name: article.title, 
-				slug: article.title.slugify,
-				group: group, 
-				article_url: article_url,
-				admin: user,
-				article: article
-			)
-			
-			# how come not guests too?
-			@discussion.users.each do |member|
-				UsersGroupsUnreadDiscussion.create(user: member, group: @discussion.group, discussion: @discussion)				
-			end
-
-			if group.name == "Feed"
-				guest = User.where.not(id: user.id).sample
-				@discussion.guests << guest
-				UsersGroupsUnreadDiscussion.create(user: guest, group: guest.groups.find_by(name: "Guest"), discussion: @discussion)
-				# guest.groups.find_by(name: "Guest") << @discussion
-			end
+			@discussion = Discussion.new_discussion(article, user, group)
 
 			@discussion.users_and_guests.each do |receiver|
-				DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
-				if receiver != user && @discussion.group.name != "Feed"
-					ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
-				end
-			
 				serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
 	      MiscChannel.broadcast_to receiver, serialized_data
 	      head :ok	
 			end
-
-			# OLD
-			# @discussion.guests.each do |guest|
-			# 	DiscussionUnreadMessage.create(user: guest, discussion: @discussion, unread_messages: 0)
-			# end			
-
-
-			# if params[:extension]	
-			# 	render json: {slug: @discussion.slug, discussion_id: @discussion.id}
-			# else
-			# 	render json: @discussion, current_user_id: user.id		
-			# end		
 		else
 			serialized_data = {discussion: { error: "could not create discussion from this source"} }
       MiscChannel.broadcast_to user, serialized_data

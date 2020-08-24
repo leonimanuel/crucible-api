@@ -11,19 +11,31 @@ task :reset_daily_reviews => :environment do
   puts "done."
 end
 
+
+
 task :daily_news_discussion => :environment do
-	rec_articles = ArticleRecommendation.where(live: true)
+	rec_articles = Article.where(vetted: true)
 	User.all.each do |user|
+		group = user.groups.find_by(name: "Feed")
 		if user.interests
 			article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
 			if article
 				# create discussion from that article
+				@discussion = Discussion.new_discussion(article, user, group)
+
+				@discussion.users_and_guests.each do |receiver|
+					serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
+		      MiscChannel.broadcast_to receiver, serialized_data
+		      head :ok	
+				end
 			else
 				#create discussion from bing recommendation
 			end
 		end
 	end
 end
+
+
 
 task :new_feed_discussion => :environment do
   User.all.each do |user|
