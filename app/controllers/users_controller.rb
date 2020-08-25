@@ -70,24 +70,26 @@ class UsersController < ApplicationController
 	end
 
 	def confirm_email
+		binding.pry
 		user = User.find_by(confirm_token: params[:token])
 		if user
 			user.update(email_confirmed: true, confirm_token: nil)
-
-			instruction_discussion = Discussion.create(
-				name: "Getting Started with Crucible", 
-				slug: "crucible-getting-started",
-				group: user.groups.find_by(name: "Feed"), 
-				article_url: "",
-				admin: user
-			)
 
 			instruction_article = Article.create(
 				title: "Getting Started with Crucible", 
 				author: "Crucible",
 				date_published: Time.now,
 				content: "crucible tutorial", 
-				discussion: instruction_discussion
+				# discussion: instruction_discussion
+			)
+
+			instruction_discussion = Discussion.create(
+				name: "Getting Started with Crucible", 
+				slug: "crucible-getting-started",
+				group: user.groups.find_by(name: "Feed"), 
+				article_url: "",
+				admin: user,
+				article: instruction_article
 			)
 
 			# admin_guest = User.find_by(email: "leonmalisov@gmail.com")

@@ -6,7 +6,7 @@ task :reset_daily_reviews => :environment do
   User.all.each do |user|
 	  reviewer_data = { daily_reviews: user.daily_reviews }
 	  ReviewsChannel.broadcast_to user, reviewer_data
-	  head :ok    	
+	  # head :ok    	
   end
   puts "done."
 end
@@ -14,23 +14,42 @@ end
 
 
 task :daily_news_discussion => :environment do
-	rec_articles = Article.where(vetted: true)
-	User.all.each do |user|
+	rec_articles = Article.where(vetted: true, updated_at: 24.hours.ago..Time.now)
+	rec_bing_article_urls = Article.get_article_rec_urls("politics")
+	User.first(1).each do |user|
+		article = nil
 		group = user.groups.find_by(name: "Feed")
 		if user.interests
+			# binding.pry
 			article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
 			if article
-				# create discussion from that article
-				@discussion = Discussion.new_discussion(article, user, group)
-
-				@discussion.users_and_guests.each do |receiver|
-					serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
-		      MiscChannel.broadcast_to receiver, serialized_data
-		      head :ok	
-				end
+				puts "using vetted article for #{user.name}"
 			else
-				#create discussion from bing recommendation
+				article_url = rec_bing_article_urls.sample
+				existing_article = Article.find_by(url: article_url)
+				if existing_article 
+					puts "using existing article match for bing rec for #{user.name}"
+					article = existing_article
+				else
+					puts "creating new article from bing rec urls for #{user.name}"
+					article = Article.new_article_from_url(rec_bing_article_urls.sample, false, "misc")
+				end				 
 			end
+		else
+			article = rec_articles.sample
+		end
+		# binding.pry
+		if article && article.content
+			# binding.pry
+			article.save
+			puts "about to create discussion for #{user.name}"
+			@discussion = Discussion.new_discussion(article, user, group)
+			@discussion.users_and_guests.each do |receiver|
+				# binding.pry
+				serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
+	      MiscChannel.broadcast_to receiver, serialized_data
+	      # head :ok	
+			end					
 		end
 	end
 end

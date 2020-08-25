@@ -74,18 +74,19 @@ class DiscussionsController < ApplicationController
 			else
 				interest = user.interests.sample
 			end
-
-			article_url = Article.get_article_rec_url(interest)
+			article_urls = Article.get_article_rec_urls(interest.query)
+			article_url = article_urls.sample
 		else
 			article_url = params[:articleURL]
 		end
 
 		article = Article.find_by(url: article_url)
 		if !article
-			article = Article.new_article_from_url(article_url)
+			article = Article.new_article_from_url(article_url, false, "misc")
 		end
 
-		if article
+		if article.content
+			article.save
 			@discussion = Discussion.new_discussion(article, user, group)
 
 			@discussion.users_and_guests.each do |receiver|
@@ -103,14 +104,14 @@ class DiscussionsController < ApplicationController
 	def show
 		user = @current_user
 		discussion_id = params[:id].split("-").last.to_i
-
 		@discussion =  Discussion.find(discussion_id)
+		binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			ugud = UsersGroupsUnreadDiscussion.find_by(user: user, discussion: @discussion)
 			if ugud.read == false
 				ugud.update(read: true)	
 			end
-			
+			binding.pry
 			render json: @discussion, current_user_id: user.id				
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else

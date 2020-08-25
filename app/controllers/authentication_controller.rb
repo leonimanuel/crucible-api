@@ -22,8 +22,8 @@ class AuthenticationController < ApplicationController
 				confirmation_token = SecureRandom.urlsafe_base64.to_s
 				user.update(confirm_token: confirmation_token)
 				ApplicationMailer.confirm_email(user, confirmation_token).deliver_now
-
-				render json: { message: "Please verify your account using the link emailed to you" }				
+				binding.pry
+				render json: { auth_token: command.result, message: "Please verify your account using the link emailed to you" }				
 			end
 	  else
 	    render json: { error: command.errors }, status: :unauthorized

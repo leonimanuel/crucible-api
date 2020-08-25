@@ -2,11 +2,12 @@ class ApplicationMailer < ActionMailer::Base
   default from: 'leon@crucible-beta.com'
   layout 'mailer'
 
-  # @@domain = "http://localhost:3001"
-  @@domain = "https://thecrucible.app"
+  @@domain = "http://localhost:3001"
+  # @@domain = "https://thecrucible.app"
 
   def new_discussion(creator, receiver, discussion)
-  	@creator = creator
+  	binding.pry
+    @creator = creator
   	@receiver = receiver
   	@discussion = discussion
   	@url = @@domain

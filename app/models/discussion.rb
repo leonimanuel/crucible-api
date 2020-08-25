@@ -34,6 +34,7 @@ class Discussion < ApplicationRecord
 	end
 
 	def self.new_discussion(article, user, group)
+		puts "creating Feed discussion for #{user.name}"
 		@discussion = self.create(
 			name: article.title, 
 			slug: article.title.slugify,
@@ -57,7 +58,9 @@ class Discussion < ApplicationRecord
 
 		@discussion.users_and_guests.each do |receiver|
 			DiscussionUnreadMessage.create(user: receiver, discussion: @discussion, unread_messages: 0)
+			binding.pry
 			if receiver != user && @discussion.group.name != "Feed"
+				binding.pry
 				ApplicationMailer.new_discussion(user, receiver, @discussion).deliver_now
 			end
 		end
