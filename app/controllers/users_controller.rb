@@ -70,7 +70,6 @@ class UsersController < ApplicationController
 	end
 
 	def confirm_email
-		binding.pry
 		user = User.find_by(confirm_token: params[:token])
 		if user
 			user.update(email_confirmed: true, confirm_token: nil)
@@ -106,7 +105,6 @@ class UsersController < ApplicationController
 	end
 
 	def resend_confirmation
-		binding.pry
 		user = @current_user
 		confirmation_token = SecureRandom.urlsafe_base64.to_s
 		user.update(confirm_token: confirmation_token)

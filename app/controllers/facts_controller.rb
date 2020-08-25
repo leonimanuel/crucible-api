@@ -64,7 +64,7 @@ class FactsController < ApplicationController
 		fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
 		if fact.save
 			if params[:rephrase] != ""
-				FactRephrase.create(content: params[:rephrase], fact: fact, user: user)
+				FactRephrase.create(content: params[:rephrase], fact: fact)
 			end
 			topic = user.topics.find_by(name: "New Facts")
 			topic.facts << fact

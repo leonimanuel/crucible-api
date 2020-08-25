@@ -105,13 +105,11 @@ class DiscussionsController < ApplicationController
 		user = @current_user
 		discussion_id = params[:id].split("-").last.to_i
 		@discussion =  Discussion.find(discussion_id)
-		binding.pry
 		if user.groups.include?(@discussion.group) || @discussion.guests.include?(user)
 			ugud = UsersGroupsUnreadDiscussion.find_by(user: user, discussion: @discussion)
 			if ugud.read == false
 				ugud.update(read: true)	
 			end
-			binding.pry
 			render json: @discussion, current_user_id: user.id				
 			# render json: DiscussionSerializer.new(discussion).to_serialized_json			
 		else
