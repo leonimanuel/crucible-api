@@ -39,7 +39,8 @@ class DiscussionSerializer < ActiveModel::Serializer
 			content: object.article.content,
 			discussion_id: object.id,
 			author: object.article.author,
-			date_published: object.article.date_published
+			date_published: DateTime.parse(object.article.date_published).to_date.strftime("%B %e, %Y"),
+			article_type: object.article.article_type
 		}
 	end
 

@@ -19,23 +19,25 @@ task :daily_news_discussion => :environment do
 	User.all.each do |user|
 		article = nil
 		group = user.groups.find_by(name: "Feed")
-		
-		until (article && !user.all_discussion_urls.include?(article.url))
+		i = 0
+		until (article && !user.all_discussion_urls.include?(article.url)) || i >= 10
+			i = i + 1
 			if user.interests
 				article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
 				if article
 					puts "using vetted article for #{user.name}"
 				else
-					article_url = rec_bing_article_urls.sample
-					existing_article = Article.find_by(url: article_url)
-					if existing_article 
-						puts "using existing article match for bing rec for #{user.name}"
-						article = existing_article
-					else
-						puts "creating new article from bing rec urls for #{user.name}"
-						article = Article.new_article_from_url(article_url, false, "misc")
-						article.save if article
-					end				 
+					article = rec_articles.sample
+					# article_url = rec_bing_article_urls.sample
+					# existing_article = Article.find_by(url: article_url)
+					# if existing_article 
+					# 	puts "using existing article match for bing rec for #{user.name}"
+					# 	article = existing_article
+					# else
+					# 	puts "creating new article from bing rec urls for #{user.name}"
+					# 	article = Article.new_article_from_url(article_url, false, "misc")
+					# 	article.save if article
+					# end				 
 				end
 			else
 				article = rec_articles.sample
