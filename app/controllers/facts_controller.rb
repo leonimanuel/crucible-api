@@ -39,22 +39,24 @@ class FactsController < ApplicationController
 				topic = user.topics.find_by(name: "New Facts")
 				topic.facts << @fact
 
-				
 				render json: @fact, topic_id: topic.id				
 			end
 		else
 			# If adding manually through the app, which hasn't been implemented yet.
+			# binding.pry
+			user = @current_user
+			# render json: {status: "success"}
 			@fact = Fact.new(content: params[:selected_text], url: params[:selection_url], review_status: "pending", collector: user)
-			if @fact.valid?
-				@fact.save
-				
+			if @fact.save
+				if params[:rephrase] != ""
+					FactRephrase.create(content: params[:rephrase], fact: @fact)
+				end
 				topic = user.topics.find_by(name: "New Facts")
-				topic.facts << @fact 
-				
+				topic.facts << @fact
+
+				# binding.pry				
 				render json: @fact, topic_id: topic.id
-			else				
-				render json: {error: "could not save fact"}
-			end			
+      end
 		end
 	end
 
