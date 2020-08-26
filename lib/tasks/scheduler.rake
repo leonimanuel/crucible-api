@@ -1,11 +1,11 @@
 desc "This task is called by the Heroku scheduler add-on"
-task :reset_daily_reviews => :environment do
+task :reset_daily_streaks => :environment do
   puts "Resetting daily reviews..."
-  User.reset_daily_reviews
+  User.reset_daily_streaks
 
   User.all.each do |user|
-	  reviewer_data = { daily_reviews: user.daily_reviews }
-	  ReviewsChannel.broadcast_to user, reviewer_data
+	  serialized_data = { quotas: {daily_reviews: user.daily_reviews, daily_facts_comments: user.daily_facts_comments} }
+	  MiscChannel.broadcast_to user, serialized_data
 	  # head :ok    	
   end
   puts "done."
@@ -14,34 +14,36 @@ end
 
 
 task :daily_news_discussion => :environment do
-	rec_articles = Article.where(vetted: true, updated_at: 24.hours.ago..Time.now)
+	rec_articles = Article.where(vetted: true, article_type: "news" ,updated_at: 24.hours.ago..Time.now)
 	rec_bing_article_urls = Article.get_article_rec_urls("politics")
-	User.first(1).each do |user|
+	User.all.each do |user|
 		article = nil
 		group = user.groups.find_by(name: "Feed")
-		if user.interests
-			# binding.pry
-			article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
-			if article
-				puts "using vetted article for #{user.name}"
-			else
-				article_url = rec_bing_article_urls.sample
-				existing_article = Article.find_by(url: article_url)
-				if existing_article 
-					puts "using existing article match for bing rec for #{user.name}"
-					article = existing_article
+		
+		until (article && !user.all_discussion_urls.include?(article.url))
+			if user.interests
+				article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
+				if article
+					puts "using vetted article for #{user.name}"
 				else
-					puts "creating new article from bing rec urls for #{user.name}"
-					article = Article.new_article_from_url(rec_bing_article_urls.sample, false, "misc")
-				end				 
+					article_url = rec_bing_article_urls.sample
+					existing_article = Article.find_by(url: article_url)
+					if existing_article 
+						puts "using existing article match for bing rec for #{user.name}"
+						article = existing_article
+					else
+						puts "creating new article from bing rec urls for #{user.name}"
+						article = Article.new_article_from_url(article_url, false, "misc")
+						article.save if article
+					end				 
+				end
+			else
+				article = rec_articles.sample
 			end
-		else
-			article = rec_articles.sample
 		end
-		# binding.pry
+
 		if article && article.content
 			# binding.pry
-			article.save
 			puts "about to create discussion for #{user.name}"
 			@discussion = Discussion.new_discussion(article, user, group)
 			@discussion.users_and_guests.each do |receiver|
@@ -52,7 +54,48 @@ task :daily_news_discussion => :environment do
 			end					
 		end
 	end
+  puts "FINISHED"	
 end
+
+
+
+
+
+task :daily_thinker_discussion => :environment do
+	rec_articles = Article.where(vetted: true, article_type: "thinker" ,updated_at: 24.hours.ago..Time.now)
+	User.all.each do |user|
+		article = nil
+		group = user.groups.find_by(name: "Feed")
+
+		until (article && !user.all_discussion_urls.include?(article.url))
+			if user.interests
+				article = rec_articles.find {|a| a.interests.find {|i| user.interests.include?(i)}}    
+				if article
+					puts "using vetted article for #{user.name}"
+				else
+					article = rec_articles.sample				 
+				end
+			else
+				article = rec_articles.sample
+			end
+		end		
+
+		if article && article.content
+			# binding.pry
+			puts "about to create discussion for #{user.name}"
+			@discussion = Discussion.new_discussion(article, user, group)
+			@discussion.users_and_guests.each do |receiver|
+				# binding.pry
+				serialized_data = ActiveModelSerializers::Adapter::Json.new(DiscussionSerializer.new(@discussion, {current_user_id: receiver.id})).serializable_hash
+	      MiscChannel.broadcast_to receiver, serialized_data
+	      # head :ok	
+			end					
+		end		
+	end
+	puts "FINISHED"
+end
+
+
 
 
 

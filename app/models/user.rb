@@ -50,8 +50,15 @@ class User < ApplicationRecord
 		}
 	end
 
-	def self.reset_daily_reviews
-		self.update_all("daily_reviews = 0")
+	def self.reset_daily_streaks
+		self.update_all(daily_reviews: 0, daily_facts_comments: 0)
+	end
+
+	def all_discussion_urls
+		discussion_urls = self.discussions.map {|d| d.article.url}.compact.uniq
+		guest_discussion_urls = self.guest_discussions.map {|d| d.article.url}.compact.uniq
+		
+		discussion_urls.concat(guest_discussion_urls).compact.uniq
 	end
 	# def total_votes
  #    items = [Fact.all, FactRephrase.all, Comment.all, FactsComment.all]

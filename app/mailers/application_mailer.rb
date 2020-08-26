@@ -6,7 +6,6 @@ class ApplicationMailer < ActionMailer::Base
   # @@domain = "https://thecrucible.app"
 
   def new_discussion(creator, receiver, discussion)
-  	binding.pry
     @creator = creator
   	@receiver = receiver
   	@discussion = discussion

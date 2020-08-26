@@ -51,6 +51,10 @@ class Discussion < ApplicationRecord
 
 		if group.name == "Feed"
 			guest = User.where.not(id: user.id).sample
+			until !guest.all_discussion_urls.include?(article.url)
+				guest = User.where.not(id: user.id).sample
+			end
+			
 			@discussion.guests << guest
 			UsersGroupsUnreadDiscussion.create(user: guest, group: guest.groups.find_by(name: "Guest"), discussion: @discussion)
 			# guest.groups.find_by(name: "Guest") << @discussion

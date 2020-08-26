@@ -85,7 +85,7 @@ class DiscussionsController < ApplicationController
 			article = Article.new_article_from_url(article_url, false, "misc")
 		end
 
-		if article.content
+		if article && article.content
 			article.save
 			@discussion = Discussion.new_discussion(article, user, group)
 
