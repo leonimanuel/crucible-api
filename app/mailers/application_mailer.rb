@@ -9,9 +9,10 @@ class ApplicationMailer < ActionMailer::Base
     @creator = creator
   	@receiver = receiver
   	@discussion = discussion
-  	@url = @@domain
+  	@url = "#{@@domain}/groups/#{discussion.group.name.split(" ").join("-")}/discussions/#{discussion.slug}-#{discussion.id}"
+    "/groups/The-Fam/discussions/kimberly-guilfoyle-2020-rnc-speech-transcript-7"
   	@specialtext = "hey there leon, emailing from croycible"
-  	mail(to: "leonmalisov@gmail.com", subject: "New discussion test")  	
+  	mail(to: "leonmalisov@gmail.com", subject: "New discussion in #{@discussion.group.name}")  	
   end
 
   def confirm_email(new_user, token)

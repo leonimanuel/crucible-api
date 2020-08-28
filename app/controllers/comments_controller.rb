@@ -48,15 +48,15 @@ class CommentsController < ApplicationController
       end        
 
 
-      serialized_notification_data = {
-        discussion_id: discussion.id, 
-        unread_messages: 1, 
-        sender_id: user.id
-      }
-      recipients.each do |user|
-        MessageNotificationsChannel.broadcast_to user, serialized_notification_data
-        head :ok
-      end
+      # serialized_notification_data = {
+      #   discussion_id: discussion.id, 
+      #   unread_messages: 1, 
+      #   sender_id: user.id
+      # }
+      # recipients.each do |user|
+      #   MessageNotificationsChannel.broadcast_to user, serialized_notification_data
+      #   head :ok
+      # end
     end
 	end
 

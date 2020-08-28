@@ -97,10 +97,6 @@ task :daily_thinker_discussion => :environment do
 	puts "FINISHED"
 end
 
-
-
-
-
 task :new_feed_discussion => :environment do
   User.all.each do |user|
   	if !user.interests.empty?

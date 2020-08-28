@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%= stylesheet_link_tag :all %>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1>You have a new discussion, <%= @receiver.name %></h1>
-    <h3>It's called <b><%= @discussion.name %></b></h3>
-    <p>
-      <%= @creator.name %> just created a new discussion.<br>
-    </p>
-    <p>
-      Click here to open it: <%= @url %>.
-    </p>
-    <p>LOOK AT IT</p>
+    <h2><%= @creator.name %> created a new discussion in <%= @discussion.group.name %>.</h2>
+    <h3>It's called <b>"<%= @discussion.name %>"</b></h3>
+
+    <a target="_blank" href=<%= @url %>>
+      <button 
+        style="
+          background-color:#0f4c75; 
+          color: white; 
+          border: none;
+          border-radius: 3px;
+          padding: 5px 10px;
+          box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 2px 2px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.12), 0 8px 8px rgba(0,0,0,0.12),0 16px 16px rgba(0,0,0,0.12);
+          font-weight: bold;
+          font-size: 1.5em; 
+          cursor: pointer;  
+        "
+      >
+        Open Discussion
+      </button>
+    </a>
   </body>
 </html>
