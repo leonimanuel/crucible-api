@@ -12,14 +12,14 @@ class ApplicationMailer < ActionMailer::Base
   	@url = "#{@@domain}/groups/#{discussion.group.name.split(" ").join("-")}/discussions/#{discussion.slug}-#{discussion.id}"
     "/groups/The-Fam/discussions/kimberly-guilfoyle-2020-rnc-speech-transcript-7"
   	@specialtext = "hey there leon, emailing from croycible"
-  	mail(to: "leonmalisov@gmail.com", subject: "New discussion in #{@discussion.group.name}")  	
+  	mail(to: @receiver.email, subject: "New discussion in #{@discussion.group.name}")  	
   end
 
   def confirm_email(new_user, token)
     @new_user = new_user
     @token = token
     @url = "#{@@domain}/#{@token}/confirm-email"
-    mail(to: "leonmalisov@gmail.com", subject: "Confirm your email") 
+    mail(to: @new_user.email, subject: "Confirm your email") 
   end
 
   def discussion_invite(guest, inviter, discussion)
@@ -29,6 +29,6 @@ class ApplicationMailer < ActionMailer::Base
   def send_feedback(user, feedback)
     @user = user
     @feedback = feedback
-    mail(to: "leonmalisov@gmail.com", subject: "Feedback from #{user.name}") 
+    mail(to: "leon@crucible-beta.com", subject: "Feedback from #{user.name}") 
   end
 end
