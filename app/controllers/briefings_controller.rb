@@ -1,6 +1,5 @@
 class BriefingsController < ApplicationController
 	def create
-		binding.pry
 		user = @current_user
 		briefing = Briefing.create(briefing_params)
 		params[:interests].each do |interest_title|
