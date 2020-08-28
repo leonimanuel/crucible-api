@@ -60,6 +60,7 @@ class DiscussionSerializer < ActiveModel::Serializer
 					{
 						id: fact.id,
 						content: fact.content,
+						review_status: fact.review_status,
 						comment_id: comment.id
 					}
 				end,
