@@ -51,7 +51,9 @@ class Discussion < ApplicationRecord
 
 		if group.name == "Feed"
 			guest = User.where.not(id: user.id).sample
-			until !guest.all_discussion_urls.include?(article.url)
+			i = 0
+			until !guest.all_discussion_urls.include?(article.url) || i >= 10
+				i ++
 				guest = User.where.not(id: user.id).sample
 			end
 			

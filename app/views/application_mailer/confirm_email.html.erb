@@ -7,20 +7,22 @@
   <body>
     <h1>Hi, <%= @new_user.name %></h1>
     <h3>Please confirm your email by clicking the button below.</h3>
-    <button 
-      style="
-        background-color:#0f4c75; 
-        color: white; 
-        border: none;
-        border-radius: 3px;
-        padding: 5px 10px;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 2px 2px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.12), 0 8px 8px rgba(0,0,0,0.12),0 16px 16px rgba(0,0,0,0.12);
-        font-weight: bold;
-        font-size: 1.5em; 
-        cursor: pointer;  
-      "
-    >
-    	<%= link_to "confirm email", @url, :target => "_blank" %>  		
-  	</button>
+    <a target="_blank" href=<%= @url %>>
+      <button 
+        style="
+          background-color:#0f4c75; 
+          color: white; 
+          border: none;
+          border-radius: 3px;
+          padding: 5px 10px;
+          box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 2px 2px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.12), 0 8px 8px rgba(0,0,0,0.12),0 16px 16px rgba(0,0,0,0.12);
+          font-weight: bold;
+          font-size: 1.5em; 
+          cursor: pointer;  
+        "
+      >
+        Confirm email
+      </button>
+    </a>
   </body>
 </html>
