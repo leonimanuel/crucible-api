@@ -2,8 +2,8 @@ class ApplicationMailer < ActionMailer::Base
   default from: 'leon@crucible-beta.com'
   layout 'mailer'
 
-  # @@domain = "http://localhost:3001"
-  @@domain = "https://thecrucible.app"
+  @@domain = "http://localhost:3001"
+  # @@domain = "https://thecrucible.app"
 
   def new_discussion(creator, receiver, discussion)
     @creator = creator
@@ -31,4 +31,17 @@ class ApplicationMailer < ActionMailer::Base
     @feedback = feedback
     mail(to: "leon@crucible-beta.com", subject: "Feedback from #{user.name}") 
   end
+
+  def new_game(discussion, user)
+    @discussion = discussion
+    @user = user
+    @discussion_url = "#{@@domain}/groups/#{discussion.group.name.split(" ").join("-")}/discussions/#{discussion.slug}-#{discussion.id}"
+    
+    mail(to: "leon@crucible-beta.com", subject: "New Game")
+  end
 end
+
+
+
+
+

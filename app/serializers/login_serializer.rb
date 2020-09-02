@@ -18,6 +18,7 @@ class LoginSerializer < ActiveModel::Serializer
     member_discussions = object.discussions.collect do |discussion|
       admin_bool = (discussion.admin == object)
       # binding.pry
+      puts  "\n\n\n #{discussion.id} \n\n\n"
       { 
         access: "member",
         id: discussion.id, 

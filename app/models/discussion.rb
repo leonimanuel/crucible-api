@@ -71,4 +71,18 @@ class Discussion < ApplicationRecord
 	
 		return @discussion
 	end
+
+	def self.new_game_discussion(article, user)
+		@discussion = self.create(
+			name: article.title, 
+			slug: article.title.slugify,
+			group: user.groups.find_by(name: "Feed"), 
+			article_url: article.url,
+			admin: user,
+			article: article,
+			game: true
+		)					
+
+		DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)			
+	end
 end

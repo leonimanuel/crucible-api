@@ -59,8 +59,6 @@ task :daily_news_discussion => :environment do
   puts "FINISHED"	
 end
 
-
-
 task :daily_thinker_discussion => :environment do
 	rec_articles = Article.where(vetted: true, article_type: "thinker" ,updated_at: 24.hours.ago..Time.now)
 	User.all.each do |user|
@@ -174,3 +172,14 @@ task :new_feed_discussion => :environment do
 		end
   end
 end
+
+
+task :game_discussion_mail_blast => :environment do
+	User.all.sample(2).each do |user|
+		discussion = user.discussions.where(game: true).last
+		ApplicationMailer.new_game(discussion, user).deliver_now
+	end
+end
+
+
+
