@@ -61,8 +61,6 @@ end
 
 
 
-
-
 task :daily_thinker_discussion => :environment do
 	rec_articles = Article.where(vetted: true, article_type: "thinker" ,updated_at: 24.hours.ago..Time.now)
 	User.all.each do |user|

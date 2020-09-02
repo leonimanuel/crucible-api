@@ -43,6 +43,7 @@ class GroupsController < ApplicationController
 			@group.users << user
 			@group.discussions.each do |discussion|
 				DiscussionUnreadMessage.create(user: user, discussion: discussion, unread_messages: 0)
+				UsersGroupsUnreadDiscussion.create(user: user, group: discussion.group, discussion: discussion)
 			end
 	 	end
 
