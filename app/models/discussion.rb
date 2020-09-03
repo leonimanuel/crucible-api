@@ -83,6 +83,7 @@ class Discussion < ApplicationRecord
 			game: true
 		)					
 
+		UsersGroupsUnreadDiscussion.create(user: user, group: user.groups.find_by(name: "Feed"), discussion: @discussion)
 		DiscussionUnreadMessage.create(user: user, discussion: @discussion, unread_messages: 0)			
 	end
 end

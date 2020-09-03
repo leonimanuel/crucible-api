@@ -175,7 +175,7 @@ end
 
 
 task :game_discussion_mail_blast => :environment do
-	User.all.sample(2).each do |user|
+	User.first(2).each do |user|
 		discussion = user.discussions.where(game: true).last
 		ApplicationMailer.new_game(discussion, user).deliver_now
 	end
