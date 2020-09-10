@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :topics
   resources :facts #do
+  post "/fact-search" => "facts#search"
+
   post "/add-from-extension" => "facts#add_from_extension"
   # post "/groups/:groupName/discussions-ext" => "discussions#create_from_extension"
 

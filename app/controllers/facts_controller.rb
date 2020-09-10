@@ -1,6 +1,18 @@
 class FactsController < ApplicationController
 	@@foribidden_domains = []
 
+	def search
+		if params["searchVal"] && params["searchVal"] != ""
+			search_val = params["searchVal"]
+			facts = Fact.where("content like ?", "%#{search_val}%").all 
+
+			render json: UserSerializer.new(facts).to_serialized_json_lite
+		else
+			facts = Fact.all
+			render json: UserSerializer.new(facts).to_serialized_json
+		end	
+	end
+
 	def create
 		user = @current_user
 		# binding.pry
