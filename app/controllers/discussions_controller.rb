@@ -10,10 +10,10 @@ class DiscussionsController < ApplicationController
 	def createBOI
 		AylienNewsApi.configure do |config|
 		  # Configure API key authorization: app_id
-		  config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = '0d507a71'
+		  config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = ENV["AYLIEN_ID"]
 
 		  # Configure API key authorization: app_key
-		  config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = '1357374853ea0c2ec00409cd29899ee5'
+		  config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = ENV["AYLIEN_KEY"]
 		end
 
 		api_instance = AylienNewsApi::DefaultApi.new
@@ -35,28 +35,6 @@ class DiscussionsController < ApplicationController
 		rescue AylienNewsApi::ApiError => e
 		  puts "Exception when calling DefaultApi->list_clusters: #{e}"
 		end
-	end
-
-	def createGURL
-		require 'uri'
-		require 'net/http'
-		require 'openssl'
-
-		url = URI("https://full-text-rss.p.rapidapi.com/extract.php")
-
-		http = Net::HTTP.new(url.host, url.port)
-		http.use_ssl = true
-		http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-		request = Net::HTTP::Post.new(url)
-		request["x-rapidapi-host"] = 'full-text-rss.p.rapidapi.com'
-		request["x-rapidapi-key"] = 'e95db40937mshaa3bb0066f2c48ap190307jsn62d857e3b282'
-		request["content-type"] = 'application/x-www-form-urlencoded'
-		request["url"] = "https://www.cnn.com/interactive/2019/02/business/starbucks-cup-problem/index.html"
-		request.body = "parser=html5php&url=https://www.wired.com/story/why-wikipedia-decided-to-stop-calling-fox-a-reliable-source/"
-
-		response = http.request(request)
-		# puts response.read_body		
 	end
 
 	def create
