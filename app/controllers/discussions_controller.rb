@@ -19,11 +19,9 @@ class DiscussionsController < ApplicationController
 		api_instance = AylienNewsApi::DefaultApi.new
 		opts = {
 	    # 'title': '"covid"',
-	    # 'body': 'election',
 	    'language': ['en'],
 	    'published_at_start': 'NOW-7DAYS',
 	    'published_at_end': 'NOW',
-	    # "links_permalink": "http://www.washingtonpost.com/politics/trump-floats-idea-of-delaying-the-november-election-as-he-ramps-up-attacks-on-voting-by-mail/2020/07/30/15fe7ac6-d264-11ea-9038-af089b63ac21_story.html",
 	    "source_domain": %w(csis.org brookings.edu rand.org),
 	    'per_page': 5,
 	    'sort_by': 'hotness'
